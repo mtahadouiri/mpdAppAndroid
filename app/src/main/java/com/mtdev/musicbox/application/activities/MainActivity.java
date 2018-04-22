@@ -206,9 +206,9 @@ public class MainActivity extends GenericActivity
         registerForContextMenu(findViewById(R.id.main_listview));
 
         if (MPDProfileManager.getInstance(this).getProfiles().size() == 0) {
-            navId = R.id.nav_profiles;
+            navId = R.id.nav_library;
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getResources().getString(R.string.welcome_dialog_title));
             builder.setMessage(getResources().getString(R.string.welcome_dialog_text));
 
@@ -216,7 +216,7 @@ public class MainActivity extends GenericActivity
             builder.setPositiveButton(R.string.dialog_action_ok, (dialog, id) -> {
             });
             AlertDialog dialog = builder.create();
-            dialog.show();
+            dialog.show();*/
         }
 
         if (findViewById(R.id.fragment_container) != null) {

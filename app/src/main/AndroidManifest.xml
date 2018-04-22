@@ -68,7 +68,7 @@
         <activity
             android:name=".application.activities.ContributorsActivity"
             android:label="Contributors"
-            android:parentActivityName=".application.activities.MainActivity"></activity>
+            android:parentActivityName=".application.activities.MainActivity" />
 
         <service
             android:name=".application.artworkdatabase.BulkDownloadService"
@@ -99,7 +99,8 @@
                 android:resource="@xml/widget_big_info" />
         </receiver>
 
-        <activity android:name=".Client.Activities.Login"></activity>
+        <activity android:name=".Client.Activities.Login" />
+        <activity android:name=".Client.Activities.Register"></activity>
     </application>
 
 </manifest>

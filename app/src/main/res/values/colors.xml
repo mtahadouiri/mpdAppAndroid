@@ -196,4 +196,6 @@
 
     <!-- Fixed colors -->
     <color name="colorWidgetBackground">#424242</color>
+    <color name="colorListItem">#111111</color>
+    <color name="colorBlack">#000000</color>
 </resources>
