@@ -32,4 +32,6 @@ public interface FABFragmentCallback {
     void setupToolbar(String title, boolean scrollingEnabled, boolean drawerIndicatorEnabled, boolean showImage);
 
     void setupToolbarImage(Bitmap bm);
+
+    void onPlaylistSelected(int position);
 }

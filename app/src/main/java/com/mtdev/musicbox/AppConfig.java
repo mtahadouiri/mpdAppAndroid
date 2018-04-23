@@ -14,4 +14,7 @@ public class AppConfig {
 
     //update image url and user infos
     public static String URL_UPDATEIMAGE = "http://10.0.2.2/mobileAndroid/updateUser.php";
+
+    public static final String HOST = "192.168.4.1";
+
 }

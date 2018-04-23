@@ -73,7 +73,7 @@
     <!-- Menu entries -->
     <string name="menu_library">Bibliothèque</string>
     <string name="menu_settings">Paramètres</string>
-    <string name="menu_server">Propriétés du serveur</string>
+    <string name="menu_server">Playlist</string>
     <string name="menu_profiles">Profils</string>
     <string name="menu_playlists">Playlists</string>
     <string name="menu_outputs">Sorties</string>

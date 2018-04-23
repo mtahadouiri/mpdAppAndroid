@@ -77,7 +77,7 @@
     <!-- Menu entries -->
     <string name="menu_library">ライブラリー</string>
     <string name="menu_settings">設定</string>
-    <string name="menu_server">サーバープロパティ</string>
+    <string name="menu_server">Playlist</string>
     <string name="menu_profiles">プロフィール</string>
     <string name="menu_playlists">プレイリスト</string>
     <string name="menu_outputs">出力</string>

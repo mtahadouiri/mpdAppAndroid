@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack"
+    android:clickable="true">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/all_playlists_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:id="@+id/noPlaylistContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlack"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:src="@drawable/ic_error_white_48dp" />
+
+        <TextView
+            android:id="@+id/noPlaylistContentText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_weight="5"
+            android:gravity="top|center_horizontal"
+            android:text="No Playlists"
+            android:textColor="#DDDDDD"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_playlist_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="65dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        android:src="@drawable/ic_plus"
+        android:visibility="visible"
+        app:backgroundTint="#111111"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="9dp"
+        app:rippleColor="#888888" />
+
+</RelativeLayout>

@@ -65,25 +65,22 @@ public class Login extends AppCompatActivity {
             finish();
         }
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = inputEmail.getText().toString().trim();
-                String password = inputPassword.getText().toString().trim();
+        btnLogin.setOnClickListener(view -> {
+            String email = inputEmail.getText().toString().trim();
+            String password = inputPassword.getText().toString().trim();
 
-                // Check for empty data in the form
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    // login user
-                    // checkLogin(email, password);
-                    Intent intent = new Intent(Login.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter the credentials!", Toast.LENGTH_LONG)
-                            .show();
-                }
+            // Check for empty data in the form
+            if (!email.isEmpty() && !password.isEmpty()) {
+                // login user
+                // checkLogin(email, password);
+                Intent intent = new Intent(Login.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                // Prompt user to enter credentials
+                Toast.makeText(getApplicationContext(),
+                        "Please enter the credentials!", Toast.LENGTH_LONG)
+                        .show();
             }
         });
         TextView registerTxtView = (TextView) findViewById(R.id.registerTxtView);

@@ -91,7 +91,7 @@
     <!-- Menu entries -->
     <string name="menu_library">라이브러리</string>
     <string name="menu_settings">설정</string>
-    <string name="menu_server">서버 설정</string>
+    <string name="menu_server">Playlist</string>
     <string name="menu_profiles">프로필</string>
     <string name="menu_playlists">연주목록</string>
     <string name="menu_outputs">출력</string>

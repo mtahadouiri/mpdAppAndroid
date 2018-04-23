@@ -22,74 +22,58 @@
 
 package com.mtdev.musicbox.application.activities;
 
+import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.MenuInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
+import com.google.gson.Gson;
+import com.mtdev.musicbox.Client.Entities.AllMusicFolders;
+import com.mtdev.musicbox.Client.Entities.LocalTrack;
+import com.mtdev.musicbox.Client.Entities.Playlist;
+import com.mtdev.musicbox.Client.Entities.UnifiedTrack;
+import com.mtdev.musicbox.Client.Fragments.NewPlaylistFragment;
+import com.mtdev.musicbox.Client.Fragments.PlayList;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.adapters.CurrentPlaylistAdapter;
-import com.mtdev.musicbox.application.fragments.ArtworkSettingsFragment;
-import com.mtdev.musicbox.application.fragments.InformationSettingsFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.ServerPropertiesFragment;
-import com.mtdev.musicbox.mpdservice.ConnectionManager;
-import com.mtdev.musicbox.application.callbacks.AddPathToPlaylist;
-import com.mtdev.musicbox.application.callbacks.FABFragmentCallback;
-import com.mtdev.musicbox.application.callbacks.PlaylistCallback;
-import com.mtdev.musicbox.application.callbacks.ProfileManageCallbacks;
-import com.mtdev.musicbox.application.fragments.EditProfileFragment;
-import com.mtdev.musicbox.application.fragments.ProfilesFragment;
-import com.mtdev.musicbox.application.fragments.SettingsFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.AlbumTracksFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.AlbumsFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.ArtistsFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.ChoosePlaylistDialog;
-import com.mtdev.musicbox.application.fragments.serverfragments.FilesFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.MyMusicTabsFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.PlaylistTracksFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.SavedPlaylistsFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.SearchFragment;
-import com.mtdev.musicbox.application.fragments.serverfragments.SongDetailsDialog;
-import com.mtdev.musicbox.application.utils.ThemeUtils;
-import com.mtdev.musicbox.application.views.CurrentPlaylistView;
-import com.mtdev.musicbox.application.views.NowPlayingView;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDQueryHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDStateMonitoringHandler;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDException;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDAlbum;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDArtist;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
-import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
-import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
-import com.mtdev.musicbox.application.adapters.CurrentPlaylistAdapter;
 import com.mtdev.musicbox.application.callbacks.AddPathToPlaylist;
 import com.mtdev.musicbox.application.callbacks.FABFragmentCallback;
 import com.mtdev.musicbox.application.callbacks.PlaylistCallback;
@@ -109,6 +93,12 @@ import com.mtdev.musicbox.application.fragments.serverfragments.PlaylistTracksFr
 import com.mtdev.musicbox.application.fragments.serverfragments.SavedPlaylistsFragment;
 import com.mtdev.musicbox.application.fragments.serverfragments.SearchFragment;
 import com.mtdev.musicbox.application.fragments.serverfragments.SongDetailsDialog;
+import com.mtdev.musicbox.application.utils.Album;
+import com.mtdev.musicbox.application.utils.AllPlaylists;
+import com.mtdev.musicbox.application.utils.Artist;
+import com.mtdev.musicbox.application.utils.MusicFolder;
+import com.mtdev.musicbox.application.utils.PlayListsHorizontalAdapter;
+import com.mtdev.musicbox.application.utils.Settings;
 import com.mtdev.musicbox.application.utils.ThemeUtils;
 import com.mtdev.musicbox.application.views.CurrentPlaylistView;
 import com.mtdev.musicbox.application.views.NowPlayingView;
@@ -122,12 +112,26 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
+
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.view.View.GONE;
+import static com.mtdev.musicbox.AppConfig.HOST;
 
 public class MainActivity extends GenericActivity
         implements NavigationView.OnNavigationItemSelectedListener, AlbumsFragment.AlbumSelectedCallback, ArtistsFragment.ArtistSelectedCallback,
         ProfileManageCallbacks, PlaylistCallback,
         NowPlayingView.NowPlayingDragStatusReceiver, FilesFragment.FilesCallback,
-        FABFragmentCallback, SettingsFragment.OnArtworkSettingsRequestedCallback {
+        FABFragmentCallback, SettingsFragment.OnArtworkSettingsRequestedCallback,NewPlaylistFragment.NewPlaylistFragmentCallbackListener {
 
 
     private static final String TAG = "MainActivity";
@@ -137,6 +141,15 @@ public class MainActivity extends GenericActivity
 
     private final static String MAINACTIVITY_SAVED_INSTANCE_NOW_PLAYING_DRAG_STATUS = "MainActivity.NowPlayingDragStatus";
     private final static String MAINACTIVITY_SAVED_INSTANCE_NOW_PLAYING_VIEW_SWITCHER_CURRENT_VIEW = "MainActivity.NowPlayingViewSwitcherCurrentView";
+    public static int themeColor = Color.parseColor("#B24242");
+    public static List<LocalTrack> finalSelectedTracks = new ArrayList<>();
+    public static List<LocalTrack> localTrackList = new ArrayList<>();
+    public static List<Album> albums = new ArrayList<>();
+    public static List<Album> finalAlbums = new ArrayList<>();
+    public static List<Artist> artists = new ArrayList<>();
+    public static List<Artist> finalArtists = new ArrayList<>();
+    public static AllPlaylists allPlaylists = new AllPlaylists();
+    public static AllMusicFolders allMusicFolders;
 
     private DRAG_STATUS mNowPlayingDragStatus;
     private DRAG_STATUS mSavedNowPlayingDragStatus = null;
@@ -152,6 +165,15 @@ public class MainActivity extends GenericActivity
 
     private FloatingActionButton mFAB;
 
+    public SharedPreferences mPrefs;
+    public static SharedPreferences.Editor prefsEditor;
+    public static Gson gson;
+
+    public static PlayListsHorizontalAdapter pAdapter;
+    private Settings settings;
+    public RecyclerView playlistsRecycler;
+    private TextView playlistNothingText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +187,9 @@ public class MainActivity extends GenericActivity
 
 
         setContentView(R.layout.activity_main);
-
+        mPrefs = getPreferences(MODE_PRIVATE);
+        prefsEditor = mPrefs.edit();
+        gson = new Gson();
         // restore elevation behaviour as pre 24 support lib
         AppBarLayout layout = findViewById(R.id.appbar);
         layout.setStateListAnimator(null);
@@ -179,7 +203,9 @@ public class MainActivity extends GenericActivity
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+        if (allMusicFolders == null) {
+            allMusicFolders = new AllMusicFolders();
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer != null) {
             mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -245,6 +271,8 @@ public class MainActivity extends GenericActivity
             transaction.replace(R.id.fragment_container, fragment);
             transaction.commit();
         }
+
+        getLocalSongs();
 
     }
 
@@ -442,8 +470,11 @@ public class MainActivity extends GenericActivity
             fragment = new SettingsFragment();
             fragmentTag = SettingsFragment.TAG;
         } else if (id == R.id.nav_server_properties) {
-            fragment = new ServerPropertiesFragment();
-            fragmentTag = ServerPropertiesFragment.TAG;
+            /*fragment = new ServerPropertiesFragment();
+            fragmentTag = ServerPropertiesFragment.TAG;*/
+            fragment = new PlayList();
+            fragmentTag = PlayList.TAG;
+            Log.d(fragmentTag,"Opened");
         } else if (id == R.id.nav_information) {
             fragment = new InformationSettingsFragment();
             fragmentTag = InformationSettingsFragment.class.getSimpleName();
@@ -454,7 +485,7 @@ public class MainActivity extends GenericActivity
 
 
         // Do the actual fragment transaction
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction().addToBackStack(null);
         transaction.replace(R.id.fragment_container, fragment, fragmentTag);
         transaction.commit();
 
@@ -830,6 +861,10 @@ public class MainActivity extends GenericActivity
         }
     }
 
+    @Override
+    public void onPlaylistSelected(int position) {
+
+    }
 
 
     @Override
@@ -959,5 +994,349 @@ public class MainActivity extends GenericActivity
         }
 
         return navId;
+    }
+
+    @Override
+    public void onCancel() {
+        finalSelectedTracks.clear();
+    }
+
+    @Override
+    public void onDone() {
+        Log.d("onDone",finalSelectedTracks.size()+" selected");
+        if (finalSelectedTracks.size() == 0) {
+            finalSelectedTracks.clear();
+            onBackPressed();
+        } else {
+            newPlaylistNameDialog();
+        }
+    }
+
+    public void newPlaylistNameDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.save_image_dialog);
+
+        TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
+        titleText.setText("Playlist Name");
+        Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+        final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
+
+        CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+        cb.setVisibility(GONE);
+
+        btn.setBackgroundColor(themeColor);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isNameRepeat = false;
+                if (newName.getText().toString().trim().equals("")) {
+                    newName.setError("Enter Playlist Name!");
+                } else {
+                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                            isNameRepeat = true;
+                            newName.setError("Playlist with same name exists!");
+                            break;
+                        }
+                    }
+                    if (!isNameRepeat) {
+                        UnifiedTrack ut;
+                        Playlist pl = new Playlist(newName.getText().toString());
+                        for (int i = 0; i < finalSelectedTracks.size(); i++) {
+                            ut = new UnifiedTrack(true, finalSelectedTracks.get(i), null);
+                            pl.getSongList().add(ut);
+                        }
+                        allPlaylists.addPlaylist(pl);
+                        finalSelectedTracks.clear();
+                        if (pAdapter != null) {
+                            pAdapter.notifyDataSetChanged();
+                            if (allPlaylists.getPlaylists().size() > 0) {
+                                playlistsRecycler.setVisibility(View.VISIBLE);
+                                playlistNothingText.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                        /*PlayList plFrag = (PlayList) fragMan.findFragmentByTag("allPlaylists");
+                        if (plFrag != null) {
+                            plFrag.dataChanged();
+                        }*/
+                        //new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                        dialog.dismiss();
+                        try {
+                            transferPlaylist(pl.getSongList());
+                        } catch (IOException e) {
+                            Log.d("error",e.getMessage());
+                        }
+                        onBackPressed();
+                    }
+                }
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public static class SavePlaylists extends AsyncTask<Void, Void, Void> {
+
+        private boolean isSavePLaylistsRunning;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (!isSavePLaylistsRunning) {
+                isSavePLaylistsRunning = true;
+                try {
+                    String json2 = gson.toJson(allPlaylists);
+                    prefsEditor.putString("allPlaylists", json2);
+                } catch (Exception e) {
+
+                }
+                isSavePLaylistsRunning = false;
+            }
+            return null;
+        }
+    }
+
+
+    public void transferPlaylist(final List<UnifiedTrack> playList) throws IOException {
+        final Thread thread = new Thread(new Runnable(){
+            public void run() {
+                try {
+                    Log.d("Connecting to server","...");
+                    for (UnifiedTrack t :playList) {
+                        Socket sock = new Socket(HOST, 13267);
+                        OutputStream os = sock.getOutputStream();
+                        DataOutputStream dos = new DataOutputStream(os);
+                        Log.d("Path",t.getLocalTrack().getPath());
+                        // sendfile
+                        File myFile = new File(t.getLocalTrack().getPath());
+                        byte[] mybytearray = new byte[(int) myFile.length()];
+
+                        FileInputStream fis = new FileInputStream(myFile);
+                        BufferedInputStream bis = new BufferedInputStream(fis);
+                        DataInputStream dis = new DataInputStream(bis);
+                        dis.readFully(mybytearray, 0, mybytearray.length);
+
+
+                        // os.write(mybytearray, 0, mybytearray.length);
+
+                        // os.flush();
+
+
+                        dos.writeUTF(myFile.getName());
+                        dos.writeLong(mybytearray.length);
+                        dos.write(mybytearray, 0, mybytearray.length);
+                        dos.flush();
+                        sock.close();
+                    }
+
+                } catch (Exception e) {
+                    Log.e("Exception","error in transfer");
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+    }
+
+    private void getLocalSongs() {
+
+        localTrackList.clear();
+        //recentlyAddedTrackList.clear();
+        //finalLocalSearchResultList.clear();
+        //finalRecentlyAddedTrackSearchResultList.clear();
+        albums.clear();
+        finalAlbums.clear();
+        artists.clear();
+        finalArtists.clear();
+
+        ContentResolver musicResolver = this.getContentResolver();
+        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, MediaStore.MediaColumns.DATE_ADDED + " DESC");
+
+        if (musicCursor != null && musicCursor.moveToFirst()) {
+            //get columns
+            int titleColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media.TITLE);
+            int idColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media._ID);
+            int artistColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media.ARTIST);
+            int albumColumn = musicCursor.getColumnIndex
+                    (MediaStore.Audio.Media.ALBUM);
+            int pathColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media.DATA);
+            int durationColumn = musicCursor.getColumnIndex
+                    (MediaStore.Audio.Media.DURATION);
+
+            //add songs to list
+            do {
+                long thisId = musicCursor.getLong(idColumn);
+                String thisTitle = musicCursor.getString(titleColumn);
+                String thisArtist = musicCursor.getString(artistColumn);
+                String thisAlbum = musicCursor.getString(albumColumn);
+                String path = musicCursor.getString(pathColumn);
+                long duration = musicCursor.getLong(durationColumn);
+                if (duration > 10000) {
+                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration);
+                    localTrackList.add(lt);
+                    /*finalLocalSearchResultList.add(lt);
+                    if (recentlyAddedTrackList.size() <= 50) {
+                        recentlyAddedTrackList.add(lt);
+                        finalRecentlyAddedTrackSearchResultList.add(lt);
+                    }*/
+
+                    int pos;
+                    if (thisAlbum != null) {
+                        pos = checkAlbum(thisAlbum);
+                        if (pos != -1) {
+                            albums.get(pos).getAlbumSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Album ab = new Album(thisAlbum, llt);
+                            albums.add(ab);
+                        }
+                        if (pos != -1) {
+                            finalAlbums.get(pos).getAlbumSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Album ab = new Album(thisAlbum, llt);
+                            finalAlbums.add(ab);
+                        }
+                    }
+
+                    if (thisArtist != null) {
+                        pos = checkArtist(thisArtist);
+                        if (pos != -1) {
+                            artists.get(pos).getArtistSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Artist ab = new Artist(thisArtist, llt);
+                            artists.add(ab);
+                        }
+                        if (pos != -1) {
+                            finalArtists.get(pos).getArtistSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Artist ab = new Artist(thisArtist, llt);
+                            finalArtists.add(ab);
+                        }
+                    }
+
+                    File f = new File(path);
+                    String dirName = f.getParentFile().getName();
+                    if (getFolder(dirName) == null) {
+                        MusicFolder mf = new MusicFolder(dirName);
+                        mf.getLocalTracks().add(lt);
+                        //allMusicFolders.getMusicFolders().add(mf);
+                    } else {
+                        getFolder(dirName).getLocalTracks().add(lt);
+                    }
+                }
+
+            }
+            while (musicCursor.moveToNext());
+        }
+
+        if (musicCursor != null)
+            musicCursor.close();
+
+       /* System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+        try {
+            if (localTrackList.size() > 0) {
+                Collections.sort(localTrackList, new LocalMusicComparator());
+                Collections.sort(finalLocalSearchResultList, new LocalMusicComparator());
+            }
+            if (albums.size() > 0) {
+                Collections.sort(albums, new AlbumComparator());
+                Collections.sort(finalAlbums, new AlbumComparator());
+            }
+            if (artists.size() > 0) {
+                Collections.sort(artists, new ArtistComparator());
+                Collections.sort(finalArtists, new ArtistComparator());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        List<UnifiedTrack> tmp = new ArrayList<>();
+        boolean queueCurrentIndexCollision = false;
+        int indexCorrection = 0;
+
+        tmp.clear();
+        List<UnifiedTrack> temp = new ArrayList<>();
+        List<Playlist> tmpPL = new ArrayList<>();
+
+        for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+            Playlist pl = allPlaylists.getPlaylists().get(i);
+            for (int j = 0; j < pl.getSongList().size(); j++) {
+                UnifiedTrack ut = pl.getSongList().get(j);
+                if (ut.getType()) {
+                    if (!checkTrack(ut.getLocalTrack())) {
+                        temp.add(ut);
+                    }
+                }
+            }
+            for (int j = 0; j < temp.size(); j++) {
+                pl.getSongList().remove(temp.get(j));
+            }
+            temp.clear();
+            if (pl.getSongList().size() == 0) {
+                tmpPL.add(pl);
+            }
+        }
+        for (int i = 0; i < tmpPL.size(); i++) {
+            allPlaylists.getPlaylists().remove(tmpPL.get(i));
+        }
+        tmpPL.clear();
+    }
+    public boolean checkTrack(LocalTrack lt) {
+        for (int i = 0; i < localTrackList.size(); i++) {
+            LocalTrack localTrack = localTrackList.get(i);
+            if (localTrack.getTitle().equals(lt.getTitle())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int checkAlbum(String album) {
+        for (int i = 0; i < albums.size(); i++) {
+            Album ab = albums.get(i);
+            if (ab.getName().equals(album)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int checkArtist(String artist) {
+        for (int i = 0; i < artists.size(); i++) {
+            Artist at = artists.get(i);
+            if (at.getName().equals(artist)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public MusicFolder getFolder(String folderName) {
+        MusicFolder mf = null;
+        for (int i = 0; i < allMusicFolders.getMusicFolders().size(); i++) {
+            MusicFolder mf1 = allMusicFolders.getMusicFolders().get(i);
+            if (mf1.getFolderName().equals(folderName)) {
+                mf = mf1;
+                break;
+            }
+        }
+        return mf;
     }
 }
