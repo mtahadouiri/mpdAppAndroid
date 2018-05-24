@@ -243,6 +243,17 @@ public class MainActivity extends GenericActivity
             });
             AlertDialog dialog = builder.create();
             dialog.show();*/
+            MPDServerProfile profile =new MPDServerProfile("MusicBox", true);
+            profile.setProfileName("MusicBox");
+            profile.setHostname(HOST);
+            profile.setPassword("");
+            profile.setPort(6600);
+            profile.setStreamingURL("http://" + HOST + ":8080");
+            profile.setStreamingEnabled(false);
+            profile.setHTTPCoverEnabled(false);
+            profile.setHTTPRegex("");
+            ConnectionManager.getInstance(this.getApplicationContext()).addProfile(profile, getApplicationContext());
+            ConnectionManager.getInstance(this.getApplicationContext()).connectProfile(profile,getApplicationContext());
         }
 
         if (findViewById(R.id.fragment_container) != null) {

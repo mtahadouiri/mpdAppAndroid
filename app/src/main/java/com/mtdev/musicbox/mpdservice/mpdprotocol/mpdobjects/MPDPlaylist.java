@@ -38,7 +38,6 @@ public class MPDPlaylist extends MPDFileEntry implements MPDGenericItem {
     public int compareTo(@NonNull MPDPlaylist another) {
         String title = getFilename();
         String anotherTitle = another.getFilename();
-
         return title.toLowerCase().compareTo(anotherTitle.toLowerCase());
     }
 }
