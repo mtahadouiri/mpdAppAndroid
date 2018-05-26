@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "640709123232",
+    "firebase_url": "https://musicoxpim.firebaseio.com",
+    "project_id": "musicoxpim",
+    "storage_bucket": "musicoxpim.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640709123232:android:52831e446aef1a85",
+        "android_client_info": {
+          "package_name": "com.mtdev.musicbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640709123232-6h7u3c8gvsh7c7hm9cbu4bct7qrt9giu.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "640709123232-6h7u3c8gvsh7c7hm9cbu4bct7qrt9giu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFFGyuNU9TtfvNCVmkHVZ9aGNrFJVcJZ0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

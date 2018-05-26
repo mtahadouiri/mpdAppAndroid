@@ -89,6 +89,11 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.5'
+    compile 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.pusher:push-notifications-android:0.9.11'
+
 
 
 }
+apply plugin: 'com.google.gms.google-services'

@@ -112,6 +112,7 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
+import com.pusher.pushnotifications.PushNotifications;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -178,7 +179,9 @@ public class MainActivity extends GenericActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+//////////////////NOTIFICATION//////////////////////////////
+        PushNotifications.start(getApplicationContext(), "e33791f2-f74a-47c8-af13-5b92bdc264d3");
+        PushNotifications.subscribe("hello");
         // restore drag state
         if (savedInstanceState != null) {
             mSavedNowPlayingDragStatus = DRAG_STATUS.values()[savedInstanceState.getInt(MAINACTIVITY_SAVED_INSTANCE_NOW_PLAYING_DRAG_STATUS)];
