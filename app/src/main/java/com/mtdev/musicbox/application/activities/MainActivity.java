@@ -66,12 +66,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.mtdev.musicbox.Client.Activities.Login;
 import com.mtdev.musicbox.Client.Entities.AllMusicFolders;
 import com.mtdev.musicbox.Client.Entities.LocalTrack;
 import com.mtdev.musicbox.Client.Entities.Playlist;
 import com.mtdev.musicbox.Client.Entities.UnifiedTrack;
 import com.mtdev.musicbox.Client.Fragments.NewPlaylistFragment;
 import com.mtdev.musicbox.Client.Fragments.PlayList;
+import com.mtdev.musicbox.Client.Utils.SQLiteHandler;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.adapters.CurrentPlaylistAdapter;
 import com.mtdev.musicbox.application.callbacks.AddPathToPlaylist;
@@ -489,13 +491,24 @@ public class MainActivity extends GenericActivity
         } else if (id == R.id.nav_information) {
             fragment = new InformationSettingsFragment();
             fragmentTag = InformationSettingsFragment.class.getSimpleName();
-        }
+        }else if (id == R.id.logout) {
+            SharedPreferences pf  = this.getSharedPreferences("AndroidHiveLogin",0);
+            SharedPreferences.Editor edit = pf.edit();
+            edit.putBoolean("isLoggedIn",false);
+            edit.commit();
+              SQLiteHandler  db = new SQLiteHandler(getApplicationContext());
 
+               db.deleteUsers();
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+            return true;
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
 
         // Do the actual fragment transaction
+
         FragmentTransaction transaction = fragmentManager.beginTransaction().addToBackStack(null);
         transaction.replace(R.id.fragment_container, fragment, fragmentTag);
         transaction.commit();

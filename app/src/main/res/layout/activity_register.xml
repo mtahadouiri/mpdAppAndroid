@@ -59,7 +59,7 @@
             android:backgroundTint="#59FFFFFF"
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/man_user2"
-            android:hint="Username"
+            android:hint="Music Genre"
             android:inputType="text"
             android:textColor="#FFF"
             android:textColorHint="#73FFFFFF" />

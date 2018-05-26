@@ -188,7 +188,6 @@ public class Register extends AppCompatActivity {
 
         };
 
-
         // Adding request to request queue
         queue.add(strReq);
     }

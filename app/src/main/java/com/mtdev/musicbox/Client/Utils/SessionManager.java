@@ -25,6 +25,7 @@ public class SessionManager {
     private static final String PREF_NAME = "AndroidHiveLogin";
 
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
+    private static final String KEY_IS_LOGGEDOUT = "isLoggedOut";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -45,4 +46,6 @@ public class SessionManager {
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
+
+
 }
