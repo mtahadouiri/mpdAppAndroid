@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/gateship-one/malp/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+![Logo](https://github.com/mtahadouiri/mpdAppAndroid/blob/master/app/src/main/res/drawable/music_dna_icon.png?raw=true)
 # Music Box - Android MPD Client #
 
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/app/org.gateshipone.malp)
