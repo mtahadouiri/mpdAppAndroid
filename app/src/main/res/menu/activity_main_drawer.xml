@@ -46,6 +46,11 @@
         android:icon="@drawable/ic_server_properties_24dp"
         android:title="@string/menu_server" />
     <item
+        android:id="@+id/shop"
+        android:checkable="true"
+        android:icon="@drawable/ic_more_vert_24dp"
+        android:title="Products" />
+    <item
         android:checkable="true"
         android:title="@string/menu_settings">
         <menu>

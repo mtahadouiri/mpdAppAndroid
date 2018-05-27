@@ -98,7 +98,7 @@ public class SQLiteHandlerCart extends SQLiteOpenHelper {
             p.setImgUrl(cursor.getString(2));
             p.setPrice(cursor.getInt(3));
             p.setQuantity(cursor.getInt(4));
-            paymentPrix += cursor.getInt(3);
+            paymentPrix += cursor.getInt(5);
             products.add(p);
         }
         cursor.close();

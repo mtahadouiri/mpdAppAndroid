@@ -64,12 +64,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.mtdev.musicbox.AppConfig;
 import com.mtdev.musicbox.Client.Activities.Login;
+import com.mtdev.musicbox.Client.Activities.Register;
 import com.mtdev.musicbox.Client.Entities.AllMusicFolders;
 import com.mtdev.musicbox.Client.Entities.LocalTrack;
 import com.mtdev.musicbox.Client.Entities.Playlist;
+import com.mtdev.musicbox.Client.Entities.Product;
 import com.mtdev.musicbox.Client.Entities.UnifiedTrack;
 import com.mtdev.musicbox.Client.Fragments.NewPlaylistFragment;
 import com.mtdev.musicbox.Client.Fragments.PlayList;
@@ -80,9 +90,14 @@ import com.mtdev.musicbox.application.callbacks.AddPathToPlaylist;
 import com.mtdev.musicbox.application.callbacks.FABFragmentCallback;
 import com.mtdev.musicbox.application.callbacks.PlaylistCallback;
 import com.mtdev.musicbox.application.callbacks.ProfileManageCallbacks;
+import com.mtdev.musicbox.application.entities.Cart;
+import com.mtdev.musicbox.application.entities.ProductType;
 import com.mtdev.musicbox.application.fragments.ArtworkSettingsFragment;
+import com.mtdev.musicbox.application.fragments.CartFragment.CartFragment;
 import com.mtdev.musicbox.application.fragments.EditProfileFragment;
 import com.mtdev.musicbox.application.fragments.InformationSettingsFragment;
+import com.mtdev.musicbox.application.fragments.MenuFragment.MenuHomeFragment;
+import com.mtdev.musicbox.application.fragments.MenuFragment.ProductsFragment;
 import com.mtdev.musicbox.application.fragments.ProfilesFragment;
 import com.mtdev.musicbox.application.fragments.SettingsFragment;
 import com.mtdev.musicbox.application.fragments.serverfragments.AlbumTracksFragment;
@@ -98,6 +113,7 @@ import com.mtdev.musicbox.application.fragments.serverfragments.SongDetailsDialo
 import com.mtdev.musicbox.application.utils.Album;
 import com.mtdev.musicbox.application.utils.AllPlaylists;
 import com.mtdev.musicbox.application.utils.Artist;
+import com.mtdev.musicbox.application.utils.CommonUtils;
 import com.mtdev.musicbox.application.utils.MusicFolder;
 import com.mtdev.musicbox.application.utils.PlayListsHorizontalAdapter;
 import com.mtdev.musicbox.application.utils.Settings;
@@ -115,6 +131,9 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -124,15 +143,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.view.View.GONE;
 import static com.mtdev.musicbox.AppConfig.HOST;
+import static com.mtdev.musicbox.application.SQLiteHandler.paymentPrix;
 
 public class MainActivity extends GenericActivity
         implements NavigationView.OnNavigationItemSelectedListener, AlbumsFragment.AlbumSelectedCallback, ArtistsFragment.ArtistSelectedCallback,
-        ProfileManageCallbacks, PlaylistCallback,
-        NowPlayingView.NowPlayingDragStatusReceiver, FilesFragment.FilesCallback,
+        ProfileManageCallbacks, PlaylistCallback,ProductsFragment.onProductAddToCartListener,CartFragment.confirmCommand,
+        NowPlayingView.NowPlayingDragStatusReceiver, FilesFragment.FilesCallback,MenuHomeFragment.OnMenuHomeSelectedListener,MenuHomeFragment.onProductTypeCLickListener,
         FABFragmentCallback, SettingsFragment.OnArtworkSettingsRequestedCallback,NewPlaylistFragment.NewPlaylistFragmentCallbackListener {
 
 
@@ -170,12 +192,14 @@ public class MainActivity extends GenericActivity
     public SharedPreferences mPrefs;
     public static SharedPreferences.Editor prefsEditor;
     public static Gson gson;
-
+    public static ProductType tempMenu;
     public static PlayListsHorizontalAdapter pAdapter;
     private Settings settings;
     public RecyclerView playlistsRecycler;
     private TextView playlistNothingText;
-
+    public static  int q=0, totalp =0;
+    public static com.mtdev.musicbox.application.SQLiteHandler db ;
+    public SQLiteHandler dbUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,7 +238,6 @@ public class MainActivity extends GenericActivity
             drawer.addDrawerListener(mDrawerToggle);
             mDrawerToggle.syncState();
         }
-
         int navId = getDefaultViewID();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -229,8 +252,8 @@ public class MainActivity extends GenericActivity
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mUseArtistSort = sharedPref.getBoolean(getString(R.string.pref_use_artist_sort_key), getResources().getBoolean(R.bool.pref_use_artist_sort_default));
 
-
-
+        db = new com.mtdev.musicbox.application.SQLiteHandler(getApplicationContext());
+        dbUser=new SQLiteHandler(getApplicationContext());
         registerForContextMenu(findViewById(R.id.main_listview));
 
         if (MPDProfileManager.getInstance(this).getProfiles().size() == 0) {
@@ -262,7 +285,7 @@ public class MainActivity extends GenericActivity
             if (savedInstanceState != null) {
                 return;
             }
-            
+
             Fragment fragment = null;
 
             if (navId == R.id.nav_library) {
@@ -491,6 +514,9 @@ public class MainActivity extends GenericActivity
         } else if (id == R.id.nav_information) {
             fragment = new InformationSettingsFragment();
             fragmentTag = InformationSettingsFragment.class.getSimpleName();
+        } else if (id == R.id.shop) {
+            fragment = new MenuHomeFragment();
+            fragmentTag = MenuHomeFragment.class.getSimpleName();
         }else if (id == R.id.logout) {
             SharedPreferences pf  = this.getSharedPreferences("AndroidHiveLogin",0);
             SharedPreferences.Editor edit = pf.edit();
@@ -1100,6 +1126,109 @@ public class MainActivity extends GenericActivity
         });
 
         dialog.show();
+
+    }
+
+    @Override
+    public void OnMenuHomeSelected(Uri uri) {
+
+    }
+
+    @Override
+    public void onProductTypeCLick() {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        ProductsFragment newFragment = (ProductsFragment) fm.findFragmentByTag("menudetails");
+        if (newFragment == null) {
+            newFragment = new ProductsFragment();
+        }
+        fm.beginTransaction()
+                .add(R.id.fragment_container, newFragment, "menudetails")
+                .show(newFragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onProductAddToCartClicked() {
+
+    }
+
+    @Override
+    public void onCartAdd() {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        CartFragment newFragment = (CartFragment) fm.findFragmentByTag("cart");
+        if (newFragment == null) {
+            newFragment = new CartFragment();
+        }
+        fm.beginTransaction()
+                .add(R.id.fragment_container, newFragment, "cart")
+                .show(newFragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onConfirmCommand() {
+        Cart myCart = new Cart();
+        myCart.setEmail(dbUser.getUserDetails().get("email"));
+        myCart.setProducts(db.getProducts());
+
+        InsertCommandInDb(myCart);
+
+    }
+
+    private void InsertCommandInDb(Cart myCart) {
+        //Volley request to insert command
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_ADDCOMMAND, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, " Response: " + response.toString());
+                String idCommand=response.toString();
+                for (com.mtdev.musicbox.application.entities.Product p : myCart.getProducts()){
+                    InsertProductCommand(p,Integer.parseInt(idCommand));
+                }
+              /*  new Thread(new Runnable() {
+                    public void run() {
+                          db.deleteProducts();
+
+                       Toast.makeText(getApplicationContext(), "Command successfully sent. Please wait for your order!", Toast.LENGTH_LONG).show();
+
+                         }
+                }).start();
+*/
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("price", String.valueOf(paymentPrix));
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        queue.add(strReq);
+
+    }
+
+    private void InsertProductCommand(com.mtdev.musicbox.application.entities.Product p,int commandID) {
+        //Volley request to insert into product_command
 
     }
 

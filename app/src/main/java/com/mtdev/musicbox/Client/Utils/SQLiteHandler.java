@@ -66,6 +66,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_PSEUDO, pseudo); // Pseudo
         values.put(KEY_EMAIL, email); // Email
 
+
         // Inserting Row
         long id = db.insert(TABLE_USER, null, values);
         db.close(); // Closing database connection
@@ -87,6 +88,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         if (cursor.getCount() > 0) {
             user.put("pseudo", cursor.getString(1));
             user.put("email", cursor.getString(2));
+            user.put("id", cursor.getString(2));
         }
         cursor.close();
         db.close();

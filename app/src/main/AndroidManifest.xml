@@ -105,6 +105,7 @@
 
         <activity android:name=".Client.Activities.Login" />
         <activity android:name=".Client.Activities.Register"></activity>
+        <activity android:name=".Client.Activities.EditProfileActivity"></activity>
     </application>
 
 </manifest>

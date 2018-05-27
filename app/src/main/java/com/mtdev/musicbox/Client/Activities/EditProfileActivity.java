@@ -114,6 +114,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 editor.putString("firstname", firstname.getText().toString());
                 editor.putString("lastname", lastname.getText().toString());
                 editor.commit();
+                Intent i = new Intent(EditProfileActivity.this, MainActivity.class );
+                startActivity(i);
             }
         });
         // Checking camera availability
