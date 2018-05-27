@@ -20,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mtdev.musicbox.Client.Entities.LocalTrack;
 import com.mtdev.musicbox.Client.Utils.ClickItemTouchListener;
@@ -35,6 +36,7 @@ public class NewPlaylistFragment extends Fragment {
     NewPlaylistRecyclerAdapter atpAdapter;
 
     ImageView backDrop;
+
 
     EditText searchBox;
 
@@ -172,14 +174,16 @@ public class NewPlaylistFragment extends Fragment {
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
-
                 LocalTrack lt = finalList.get(position);
                 if (MainActivity.finalSelectedTracks.contains(lt)) {
                     MainActivity.finalSelectedTracks.remove(lt);
                     numberSelected--;
                 } else {
-                    MainActivity.finalSelectedTracks.add(lt);
-                    numberSelected++;
+                    if(numberSelected < 5){
+                        MainActivity.finalSelectedTracks.add(lt);
+                        numberSelected++;
+                    }else
+                    Toast.makeText(getContext(),"Vous avez selectionné le nombre maximum de morceaux",Toast.LENGTH_LONG).show();
                 }
 
                 numberSelectedSongs.setText(String.valueOf(numberSelected) + " selected");
