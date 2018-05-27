@@ -1,24 +1,4 @@
-/*
- *  Copyright (C) 2018 Team Gateship-One
- *  (Hendrik Borghorst & Frederik Luetkes)
- *
- *  The AUTHORS.md file contains a detailed contributors list:
- *  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
 
 package com.mtdev.musicbox.application.fragments.serverfragments;
 
@@ -31,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.Loader;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -48,11 +27,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 
-import java.util.List;
-
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.adapters.FileAdapter;
-import com.mtdev.musicbox.application.callbacks.AddPathToPlaylist;
 import com.mtdev.musicbox.application.callbacks.FABFragmentCallback;
 import com.mtdev.musicbox.application.loaders.SearchResultLoader;
 import com.mtdev.musicbox.application.utils.PreferenceHelper;
@@ -60,8 +36,10 @@ import com.mtdev.musicbox.application.utils.ThemeUtils;
 import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDQueryHandler;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDCommands;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDAlbum;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDFileEntry;
+import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
+
+import java.util.List;
 
 public class SearchFragment extends GenericMPDFragment<List<MPDFileEntry>> implements AdapterView.OnItemClickListener, View.OnFocusChangeListener {
     public static final String TAG = SearchFragment.class.getSimpleName();
@@ -274,22 +252,9 @@ public class SearchFragment extends GenericMPDFragment<List<MPDFileEntry>> imple
             case R.id.action_song_play:
                 MPDQueryHandler.playSong(track.getPath());
                 return true;
-            case R.id.action_song_enqueue:
-                MPDQueryHandler.addPath(track.getPath());
-                return true;
             case R.id.action_song_play_next:
                 MPDQueryHandler.playSongNext(track.getPath());
                 return true;
-            case R.id.action_add_to_saved_playlist:{
-                // open dialog in order to save the current playlist as a playlist in the mediastore
-                ChoosePlaylistDialog choosePlaylistDialog = new ChoosePlaylistDialog();
-                Bundle args = new Bundle();
-                args.putBoolean(ChoosePlaylistDialog.EXTRA_SHOW_NEW_ENTRY, true);
-                choosePlaylistDialog.setCallback(new AddPathToPlaylist((MPDFileEntry) mFileAdapter.getItem(position), getContext()));
-                choosePlaylistDialog.setArguments(args);
-                choosePlaylistDialog.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "ChoosePlaylistDialog");
-                return true;
-             }
             case R.id.action_show_details: {
                 // Open song details dialog
                 SongDetailsDialog songDetailsDialog = new SongDetailsDialog();
@@ -299,22 +264,6 @@ public class SearchFragment extends GenericMPDFragment<List<MPDFileEntry>> imple
                 songDetailsDialog.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "SongDetails");
                 return true;
             }
-            case R.id.action_add_album:
-                MPDQueryHandler.addArtistAlbum(track.getTrackAlbum(), "", track.getTrackAlbumMBID());
-                return true;
-            case R.id.action_play_album:
-                MPDQueryHandler.playArtistAlbum(track.getTrackAlbum(), "", track.getTrackAlbumMBID());
-                return true;
-            case R.id.action_add_artist:
-                MPDQueryHandler.addArtist(track.getTrackArtist(),mAlbumSortOrder);
-                return true;
-            case R.id.action_play_artist:
-                MPDQueryHandler.playArtist(track.getTrackArtist(),mAlbumSortOrder);
-                return true;
-            case R.id.menu_group_album:
-            case R.id.menu_group_artist:
-                // Save position for later use
-                mContextMenuPosition = info.position;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -371,12 +320,6 @@ public class SearchFragment extends GenericMPDFragment<List<MPDFileEntry>> imple
                 args.putParcelable(SongDetailsDialog.EXTRA_FILE, (MPDTrack) mFileAdapter.getItem(position));
                 songDetailsDialog.setArguments(args);
                 songDetailsDialog.show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "SongDetails");
-                return;
-            }
-            case ACTION_ADD_SONG:{
-                MPDTrack track = (MPDTrack) mFileAdapter.getItem(position);
-
-                MPDQueryHandler.addPath(track.getPath());
                 return;
             }
             case ACTION_PLAY_SONG: {

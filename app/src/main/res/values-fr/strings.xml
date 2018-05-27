@@ -1,25 +1,4 @@
 <?xml version="1.0"?>
-    <!--
-  ~  Copyright (C) 2018 Team Gateship-One
-  ~  (Hendrik Borghorst & Frederik Luetkes)
-  ~
-  ~  The AUTHORS.md file contains a detailed contributors list:
-  ~  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
-  ~
-  ~  This program is free software: you can redistribute it and/or modify
-  ~  it under the terms of the GNU General Public License as published by
-  ~  the Free Software Foundation, either version 3 of the License, or
-  ~  (at your option) any later version.
-  ~
-  ~  This program is distributed in the hope that it will be useful,
-  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~  GNU General Public License for more details.
-  ~
-  ~  You should have received a copy of the GNU General Public License
-  ~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  ~
-  -->
 <resources>
     <string name="navigation_drawer_open">Ouvrir le tiroir de navigation</string>
     <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
@@ -277,9 +256,9 @@
     <string name="bulk_download_notice_text">Télécharger un grand nombre d\'images nécessite de nombreuses ressources. Il est possible que le serveur du fournisseur arrête le téléchargement s\'il détecte que la charge du serveur est trop importante.\n\nMerci de penser à donner à ces fournisseurs un peu de votre temps ou de votre argent.</string>
     <!-- About activity -->
     <string name="artwork_provided_by">Artwork fourni par :</string>
-    <string name="acknowledgement_text">Un grand merci à Frederik Lütkes pour son développement actif d\'Odyssey, un lecteur de musique dont ce programme utilise le GUI.</string>
+    <string name="acknowledgement_text">Un grand merci à notre tuteur Manel Khiari, à nos familles et à la communauté stackoverflow / mopidy qui sans eux ce projet ne serait pas.</string>
     <string name="license_text">Cette application est sous licence GPLv3.\nLes icônes \"Material Design\" sont sous licence CC-BY par Google.</string>
-    <string name="sources_text">Le code source est disponible sur GitHub :\nhttps://github.com/gateship-one/malp</string>
+    <string name="sources_text">Le code source est disponible sur GitHub :\nhttps://github.com/mtahadouiri/mpdAppAndroid</string>
     <string name="activity_about_version">Version :</string>
     <!-- Bulk downloader service -->
     <string name="downloader_notification_title">Téléchargement en masse en cours</string>
@@ -289,12 +268,6 @@
     <!-- Widget -->
     <string name="widget_disconnected">Déconnecté</string>
     <string name="widget_connect">Connecté</string>
-    <!-- Contributors activity -->
-    <string name="contributors_title">Contributeurs</string>
-    <string name="contributor_translator_japanese">Traduction Japonaise</string>
-    <string name="contributor_translator_french">Traduction Française</string>
-    <string name="contributor_translator_spanish">Traduction Espagnole</string>
-    <string name="contributor_translator_korean">Traduction Coréenne</string>
-    <!-- Thirdparty Licenses dialog -->
-    <string name="thirdparty_licenses_dialog_title">Licences tierces</string>
+    <string name="contributors_title">Developers</string>
+
 </resources>

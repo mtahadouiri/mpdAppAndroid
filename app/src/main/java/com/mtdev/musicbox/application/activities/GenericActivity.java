@@ -1,24 +1,4 @@
-/*
- *  Copyright (C) 2018 Team Gateship-One
- *  (Hendrik Borghorst & Frederik Luetkes)
- *
- *  The AUTHORS.md file contains a detailed contributors list:
- *  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
 
 package com.mtdev.musicbox.application.activities;
 
@@ -36,17 +16,6 @@ import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import com.mtdev.musicbox.R;
-import com.mtdev.musicbox.application.background.BackgroundService;
-import com.mtdev.musicbox.application.background.BackgroundServiceConnection;
-import com.mtdev.musicbox.application.utils.HardwareKeyHandler;
-import com.mtdev.musicbox.mpdservice.ConnectionManager;
-import com.mtdev.musicbox.mpdservice.handlers.MPDConnectionErrorHandler;
-import com.mtdev.musicbox.mpdservice.handlers.MPDConnectionStateChangeHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDCommandHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDQueryHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDStateMonitoringHandler;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDException;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDInterface;
 import com.mtdev.musicbox.application.background.BackgroundService;
 import com.mtdev.musicbox.application.background.BackgroundServiceConnection;
 import com.mtdev.musicbox.application.utils.HardwareKeyHandler;
@@ -87,7 +56,7 @@ public abstract class GenericActivity extends AppCompatActivity implements Share
         // Read theme preference
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String themePref = sharedPref.getString(getString(R.string.pref_theme_key), getString(R.string.pref_theme_default));
-        boolean darkTheme = sharedPref.getBoolean(getString(R.string.pref_dark_theme_key), getResources().getBoolean(R.bool.pref_theme_dark_default));
+       /* boolean darkTheme = sharedPref.getBoolean(getString(R.string.pref_dark_theme_key), getResources().getBoolean(R.bool.pref_theme_dark_default));
         if (darkTheme) {
             if (themePref.equals(getString(R.string.pref_indigo_key))) {
                 setTheme(R.style.AppTheme_indigo);
@@ -127,7 +96,9 @@ public abstract class GenericActivity extends AppCompatActivity implements Share
         }
         if (themePref.equals(getString(R.string.pref_oleddark_key))) {
             setTheme(R.style.AppTheme_oledDark);
-        }
+        }*/
+        setTheme(R.style.AppTheme_red);
+
         mErrorListener = new MPDErrorListener(this);
     }
 

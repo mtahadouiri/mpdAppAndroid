@@ -23,20 +23,16 @@
 
 <resources>
     <string-array name="contributors" translatable="false">
-        <item>Hendrik Borghorst</item>
-        <item>Frederik Lütkes</item>
-        <item>naofum</item>
-        <item>Guy de Mölkky</item>
-        <item>Víctor García</item>
-        <item>Minho Park (한국어 번역)</item>
+        <item>Ben Sassi Jihen</item>
+        <item>Moncer Ahmed</item>
+        <item>Gharrech Aziz</item>
+        <item>Douiri Mohamed Taha</item>
     </string-array>
 
     <string-array name="contributors_type">
-        <item>@string/contributor_team</item>
-        <item>@string/contributor_team</item>
-        <item>@string/contributor_translator_japanese</item>
-        <item>@string/contributor_translator_french</item>
-        <item>@string/contributor_translator_spanish</item>
-        <item>@string/contributor_translator_korean</item>
+        <item>"Developer"</item>
+        <item>"Developer</item>
+        <item>"Developer</item>
+        <item>"Developer</item>
     </string-array>
 </resources>

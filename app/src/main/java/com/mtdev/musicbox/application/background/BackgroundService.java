@@ -1,24 +1,4 @@
-/*
- *  Copyright (C) 2018 Team Gateship-One
- *  (Hendrik Borghorst & Frederik Luetkes)
- *
- *  The AUTHORS.md file contains a detailed contributors list:
- *  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
 
 package com.mtdev.musicbox.application.background;
 
@@ -45,21 +25,13 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
-import com.mtdev.musicbox.mpdservice.ConnectionManager;
-import com.mtdev.musicbox.mpdservice.handlers.MPDConnectionStateChangeHandler;
-import com.mtdev.musicbox.mpdservice.handlers.MPDStatusChangeHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDCommandHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDStateMonitoringHandler;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDInterface;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
-import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
-import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 
 public class BackgroundService extends Service implements AudioManager.OnAudioFocusChangeListener {
     private static final String TAG = BackgroundService.class.getSimpleName();
+    private Calendar previous;
 
     public enum STREAMING_STATUS {
         STOPPED,
@@ -346,7 +318,25 @@ public class BackgroundService extends Service implements AudioManager.OnAudioFo
      */
     private void onNext() {
         checkMPDConnection();
-        MPDCommandHandler.nextSong();
+        SkipSong();
+    }
+    private void SkipSong() {
+        if(previous == null){
+            //at least 20 minutes difference
+            MPDCommandHandler.nextSong();
+            previous = Calendar.getInstance();
+        }else{
+            Calendar now = Calendar.getInstance();
+            long diff = now.getTimeInMillis() - previous.getTimeInMillis();
+            if(diff >= 15 * 60 * 1000)
+            {
+                //at least 20 minutes difference
+                MPDCommandHandler.nextSong();
+                previous = Calendar.getInstance();
+            }
+            else{
+            }
+        }
     }
 
     /**

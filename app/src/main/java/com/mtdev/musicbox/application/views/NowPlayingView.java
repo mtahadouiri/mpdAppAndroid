@@ -55,8 +55,8 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
-
 
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.activities.FanartActivity;
@@ -76,17 +76,15 @@ import com.mtdev.musicbox.mpdservice.handlers.MPDConnectionStateChangeHandler;
 import com.mtdev.musicbox.mpdservice.handlers.MPDStatusChangeHandler;
 import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDCommandHandler;
 import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDQueryHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDStateMonitoringHandler;;
+import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDStateMonitoringHandler;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDInterface;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDAlbum;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDArtist;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
-import com.mtdev.musicbox.application.callbacks.OnSaveDialogListener;
-import com.mtdev.musicbox.application.fragments.TextDialog;
-import com.mtdev.musicbox.application.fragments.serverfragments.ChoosePlaylistDialog;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuItemClickListener, ArtworkManager.onNewAlbumImageListener, ArtworkManager.onNewArtistImageListener,
@@ -99,6 +97,8 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
     private ServerStatusListener mStateListener;
 
     private ServerConnectionListener mConnectionStateListener;
+
+    private long lastSkipRequest;
 
     /**
      * Upper view part which is dragged up & down
@@ -235,6 +235,7 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
     private MPDTrack mLastTrack;
 
     private boolean mUseEnglishWikipedia;
+    private Calendar previous;
 
     public NowPlayingView(Context context) {
         this(context, null, 0);
@@ -970,15 +971,21 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
         });
 
         // Add listener to bottom previous button
-        mBottomPreviousButton.setOnClickListener(arg0 -> MPDCommandHandler.previousSong());
+        mBottomPreviousButton.setOnClickListener(v -> {
+            Toast.makeText(getContext(),"Only admin and Premium users can skip back",Toast.LENGTH_LONG).show();
+        });
 
         // Add listener to bottom playpause button
-        mBottomPlayPauseButton.setOnClickListener(arg0 -> MPDCommandHandler.togglePause());
+        mBottomPlayPauseButton.setOnClickListener(v -> Toast.makeText(getContext(),"Only admin can Pause/Stop the playlist",Toast.LENGTH_LONG).show());
 
-        mBottomStopButton.setOnClickListener(view -> MPDCommandHandler.stop());
+        mBottomStopButton.setOnClickListener(view -> Toast.makeText(getContext(),"Only admin can Pause/Stop the playlist",Toast.LENGTH_LONG).show());
 
         // Add listener to bottom next button
-        mBottomNextButton.setOnClickListener(arg0 -> MPDCommandHandler.nextSong());
+        mBottomNextButton.setOnClickListener(arg0 -> {
+            //init skip
+            SkipSong();
+
+        });
 
         // Add listener to bottom random button
         mBottomRandomButton.setOnClickListener(arg0 -> {
@@ -998,6 +1005,28 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
         mCoverImage.setVisibility(INVISIBLE);
 
         mCoverLoader = new CoverBitmapLoader(getContext(), new CoverReceiverClass());
+    }
+
+    private void SkipSong() {
+        if(previous == null){
+            //at least 20 minutes difference
+            MPDCommandHandler.nextSong();
+            previous = Calendar.getInstance();
+            Toast.makeText(getContext(),"Song skipped , your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+        }else{
+            Calendar now = Calendar.getInstance();
+            long diff = now.getTimeInMillis() - previous.getTimeInMillis();
+            if(diff >= 15 * 60 * 1000)
+            {
+                //at least 20 minutes difference
+                MPDCommandHandler.nextSong();
+                previous = Calendar.getInstance();
+                Toast.makeText(getContext(),"Song skipped , your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(getContext(),"You already skipped a song, your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     /**

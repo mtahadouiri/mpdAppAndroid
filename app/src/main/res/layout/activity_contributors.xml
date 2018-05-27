@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/icon_512" />
+        android:src="@drawable/music_dna_icon" />
 
     <TextView
         android:layout_width="match_parent"

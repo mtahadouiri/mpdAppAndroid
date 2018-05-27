@@ -1,31 +1,13 @@
-/*
- *  Copyright (C) 2018 Team Gateship-One
- *  (Hendrik Borghorst & Frederik Luetkes)
- *
- *  The AUTHORS.md file contains a detailed contributors list:
- *  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
 
 package com.mtdev.musicbox.application.activities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -40,9 +22,11 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -94,7 +78,6 @@ import com.mtdev.musicbox.application.entities.ProductType;
 import com.mtdev.musicbox.application.fragments.ArtworkSettingsFragment;
 import com.mtdev.musicbox.application.fragments.CartFragment.CartFragment;
 import com.mtdev.musicbox.application.fragments.EditProfileFragment;
-import com.mtdev.musicbox.application.fragments.InformationSettingsFragment;
 import com.mtdev.musicbox.application.fragments.MenuFragment.MenuHomeFragment;
 import com.mtdev.musicbox.application.fragments.MenuFragment.ProductsFragment;
 import com.mtdev.musicbox.application.fragments.ProfilesFragment;
@@ -516,19 +499,19 @@ public class MainActivity extends GenericActivity
         } else if (id == R.id.nav_profiles) {
             fragment = new ProfilesFragment();
             fragmentTag = ProfilesFragment.TAG;
-        } else if (id == R.id.nav_app_settings) {
+        } /*else if (id == R.id.nav_app_settings) {
             fragment = new SettingsFragment();
             fragmentTag = SettingsFragment.TAG;
-        } else if (id == R.id.nav_server_properties) {
+        } */else if (id == R.id.nav_server_properties) {
             /*fragment = new ServerPropertiesFragment();
             fragmentTag = ServerPropertiesFragment.TAG;*/
             fragment = new PlayList();
             fragmentTag = PlayList.TAG;
             Log.d(fragmentTag,"Opened");
-        } else if (id == R.id.nav_information) {
+        } /*else if (id == R.id.nav_information) {
             fragment = new InformationSettingsFragment();
             fragmentTag = InformationSettingsFragment.class.getSimpleName();
-        } else if (id == R.id.shop) {
+        } */else if (id == R.id.shop) {
             fragment = new MenuHomeFragment();
             fragmentTag = MenuHomeFragment.class.getSimpleName();
         }else if (id == R.id.logout) {
@@ -1543,4 +1526,6 @@ public class MainActivity extends GenericActivity
         }
         return mf;
     }
+
+
 }

@@ -41,23 +41,6 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDInterface;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDAlbum;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDArtist;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDFileEntry;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDOutput;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDStatistics;
-import com.mtdev.musicbox.mpdservice.handlers.responsehandler.MPDResponseAlbumList;
-import com.mtdev.musicbox.mpdservice.handlers.responsehandler.MPDResponseArtistList;
-import com.mtdev.musicbox.mpdservice.handlers.responsehandler.MPDResponseFileList;
-import com.mtdev.musicbox.mpdservice.handlers.responsehandler.MPDResponseHandler;
-import com.mtdev.musicbox.mpdservice.handlers.responsehandler.MPDResponseOutputList;
-import com.mtdev.musicbox.mpdservice.handlers.responsehandler.MPDResponseServerStatistics;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDCapabilities;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDCommands;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDException;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDInterface;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDAlbum;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDArtist;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDFileEntry;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDOutput;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDStatistics;
@@ -1127,6 +1110,7 @@ public class MPDQueryHandler extends MPDGenericHandler {
 
 
     public static void playSong(String url) {
+
         MPDHandlerAction action = new MPDHandlerAction(MPDHandlerAction.NET_HANDLER_ACTION.ACTION_PLAY_SONG);
         Message msg = Message.obtain();
         if (null == msg) {
