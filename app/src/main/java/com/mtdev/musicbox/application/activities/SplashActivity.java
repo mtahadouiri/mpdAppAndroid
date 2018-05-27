@@ -37,7 +37,15 @@ public class SplashActivity extends AppCompatActivity {
                 // result of the request.
             }
         } else {
+            Bundle extras = getIntent().getExtras();
+
             // Permission has already been granted
+            Intent intent = new Intent(this, Login.class);
+            if (extras != null) {
+                intent.putExtras(extras);
+            }
+            startActivity(intent);
+            finish();
         }
 
     }
