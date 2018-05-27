@@ -69,11 +69,4 @@
         android:layout_below="@id/local_header_wrapper"
         android:layout_marginTop="3dp"/>
 
-    <View
-        android:id="@+id/bottom_margin_layout"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorBlack"
-        android:clickable="true" />
 </RelativeLayout>

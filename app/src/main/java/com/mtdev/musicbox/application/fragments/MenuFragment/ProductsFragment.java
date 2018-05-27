@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.activities.MainActivity;
 import com.mtdev.musicbox.application.entities.Product;
+import com.mtdev.musicbox.application.utils.ProductListJSONParser;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.mtdev.musicbox.AppConfig.URL_SELECTPRODUCTS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +53,7 @@ public class ProductsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     ProductRecyclerAdapter adapter;
     ProductsFragment.onProductAddToCartListener mCallback;
-
+    List<Product> productList;
 
     RecyclerView lv;
     LinearLayoutManager mLayoutManager2;
@@ -105,7 +118,7 @@ public class ProductsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getProductList();
 
        // ((HomeActivity) getActivity()).onQueryTextChange("");
         isSearchboxVisible = false;
@@ -145,16 +158,37 @@ public class ProductsFragment extends Fragment {
             }
         });
 
-
         lv = (RecyclerView) view.findViewById(R.id.localMusicList);
-        adapter = new ProductRecyclerAdapter(Product.ProtoProducts(), getContext());
-        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        lv.setLayoutManager(mLayoutManager2);
-        lv.setItemAnimator(new DefaultItemAnimator());
-        lv.setAdapter(adapter);
 
 
 
+
+
+    }
+    private void getProductList() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url =  URL_SELECTPRODUCTS+"?menu_id="+MainActivity.tempMenu.getId();
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        productList = new ArrayList<>();
+                        productList = ProductListJSONParser.parseData(response);
+                        adapter = new ProductRecyclerAdapter(productList, getContext());
+                        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                        lv.setLayoutManager(mLayoutManager2);
+                        lv.setItemAnimator(new DefaultItemAnimator());
+                        lv.setAdapter(adapter);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error",""+ error.getMessage());
+            }
+        });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 
     @Override

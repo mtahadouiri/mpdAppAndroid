@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mtdev.musicbox.AppConfig;
 import com.mtdev.musicbox.Client.Utils.ImageLoader;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.entities.ProductType;
@@ -46,9 +47,9 @@ public class ProductTypesRecyclerAdapter extends RecyclerView.Adapter<ProductTyp
         ProductType ab = albumList.get(position);
         holder.title.setText(ab.getName());
         holder.title.setTextColor(Color.parseColor("#DDDDDD"));
-        holder.artist.setText(ab.getDesc());
+        holder.artist.setText("Menu  Of " + ab.getName() +"s." );
         holder.artist.setTextColor(Color.parseColor("#BBBBBB"));
-        Picasso.with(ctx).load(ab.getImgUrl()).into(holder.art);
+        Picasso.with(ctx).load(AppConfig.URL_GETIMG_PREFIX+ab.getImgUrl()).into(holder.art);
 
         //imgLoader.DisplayImage(ab.getAlbumSongs().get(0).getPath(), holder.art);
     }

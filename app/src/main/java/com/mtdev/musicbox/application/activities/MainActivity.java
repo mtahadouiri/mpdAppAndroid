@@ -75,11 +75,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mtdev.musicbox.AppConfig;
 import com.mtdev.musicbox.Client.Activities.Login;
-import com.mtdev.musicbox.Client.Activities.Register;
 import com.mtdev.musicbox.Client.Entities.AllMusicFolders;
 import com.mtdev.musicbox.Client.Entities.LocalTrack;
 import com.mtdev.musicbox.Client.Entities.Playlist;
-import com.mtdev.musicbox.Client.Entities.Product;
 import com.mtdev.musicbox.Client.Entities.UnifiedTrack;
 import com.mtdev.musicbox.Client.Fragments.NewPlaylistFragment;
 import com.mtdev.musicbox.Client.Fragments.PlayList;
@@ -91,6 +89,7 @@ import com.mtdev.musicbox.application.callbacks.FABFragmentCallback;
 import com.mtdev.musicbox.application.callbacks.PlaylistCallback;
 import com.mtdev.musicbox.application.callbacks.ProfileManageCallbacks;
 import com.mtdev.musicbox.application.entities.Cart;
+import com.mtdev.musicbox.application.entities.Product;
 import com.mtdev.musicbox.application.entities.ProductType;
 import com.mtdev.musicbox.application.fragments.ArtworkSettingsFragment;
 import com.mtdev.musicbox.application.fragments.CartFragment.CartFragment;
@@ -113,9 +112,9 @@ import com.mtdev.musicbox.application.fragments.serverfragments.SongDetailsDialo
 import com.mtdev.musicbox.application.utils.Album;
 import com.mtdev.musicbox.application.utils.AllPlaylists;
 import com.mtdev.musicbox.application.utils.Artist;
-import com.mtdev.musicbox.application.utils.CommonUtils;
 import com.mtdev.musicbox.application.utils.MusicFolder;
 import com.mtdev.musicbox.application.utils.PlayListsHorizontalAdapter;
+import com.mtdev.musicbox.application.utils.ProductListJSONParser;
 import com.mtdev.musicbox.application.utils.Settings;
 import com.mtdev.musicbox.application.utils.ThemeUtils;
 import com.mtdev.musicbox.application.views.CurrentPlaylistView;
@@ -132,9 +131,6 @@ import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
 import com.pusher.pushnotifications.PushNotifications;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -150,6 +146,7 @@ import java.util.Map;
 
 import static android.view.View.GONE;
 import static com.mtdev.musicbox.AppConfig.HOST;
+import static com.mtdev.musicbox.AppConfig.URL_SELECTPRODUCTS;
 import static com.mtdev.musicbox.application.SQLiteHandler.paymentPrix;
 
 public class MainActivity extends GenericActivity
@@ -201,10 +198,12 @@ public class MainActivity extends GenericActivity
     public static  int q=0, totalp =0;
     public static com.mtdev.musicbox.application.SQLiteHandler db ;
     public SQLiteHandler dbUser;
+    public static List<Product> productList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        productList = new ArrayList<com.mtdev.musicbox.application.entities.Product>();
 //////////////////NOTIFICATION//////////////////////////////
         PushNotifications.start(getApplicationContext(), "e33791f2-f74a-47c8-af13-5b92bdc264d3");
         PushNotifications.subscribe("hello");
@@ -1156,6 +1155,7 @@ public class MainActivity extends GenericActivity
         if (newFragment == null) {
             newFragment = new ProductsFragment();
         }
+
         fm.beginTransaction()
                 .add(R.id.fragment_container, newFragment, "menudetails")
                 .show(newFragment)
@@ -1244,8 +1244,44 @@ public class MainActivity extends GenericActivity
 
     private void InsertProductCommand(com.mtdev.musicbox.application.entities.Product p,int commandID) {
         //Volley request to insert into product_command
+        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
+        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_ADDPRODUCT_COMMAND, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, " Response product command: " + response.toString());
+                String idProductCommand=response.toString();
+                Toast.makeText(getApplicationContext(), "Command successfully sent. Please wait for your order!", Toast.LENGTH_LONG).show();
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("product_id", "3");
+                params.put("commande_id", String.valueOf(commandID));
+                params.put("quantite", String.valueOf(p.getQuantity()));
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        queue.add(strReq);
     }
+
+
 
     public static class SavePlaylists extends AsyncTask<Void, Void, Void> {
 

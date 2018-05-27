@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,14 +30,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.mtdev.musicbox.Client.Utils.ClickItemTouchListener;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.activities.MainActivity;
 import com.mtdev.musicbox.application.entities.ProductType;
+import com.mtdev.musicbox.application.utils.ProductListJSONParser;
+import com.mtdev.musicbox.application.utils.ProductTypeListJSONParser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static com.mtdev.musicbox.AppConfig.URL_SELECTPRODUCTS;
+import static com.mtdev.musicbox.AppConfig.URL_SELECT_TYPE_PRODUCTS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,7 +82,8 @@ public class MenuHomeFragment extends Fragment {
     private String mParam2;
     Context ctx;
     MainActivity activity;
-
+    List<ProductType> productList;
+    ProductTypesRecyclerAdapter adapter;
     public interface onProductTypeCLickListener {
         public void onProductTypeCLick();
     }
@@ -168,16 +181,12 @@ public class MenuHomeFragment extends Fragment {
 
 
         rv = (RecyclerView) view.findViewById(R.id.albums_recycler);
-        abAdapter = new ProductTypesRecyclerAdapter(ProductType.ProtoProdyctType(), getContext());
-        glManager = new GridLayoutManager(getContext(), 2);
-        rv.setLayoutManager(glManager);
-        rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setAdapter(abAdapter);
+        getProductList();
 
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
-                MainActivity.tempMenu = ProductType.ProtoProdyctType().get(position);
+                MainActivity.tempMenu = productList.get(position);
                 mCallback.onProductTypeCLick();
                 return true;
             }
@@ -212,6 +221,31 @@ public class MenuHomeFragment extends Fragment {
         void OnMenuHomeSelected(Uri uri);
     }
 
+    private void getProductList() {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url =  URL_SELECT_TYPE_PRODUCTS;
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        productList = new ArrayList<>();
+                        productList = ProductTypeListJSONParser.parseData(response);
+                        abAdapter = new ProductTypesRecyclerAdapter(productList, getContext());
+                        glManager = new GridLayoutManager(getContext(), 2);
+                        rv.setLayoutManager(glManager);
+                        rv.setItemAnimator(new DefaultItemAnimator());
+                        rv.setAdapter(abAdapter);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error",""+ error.getMessage());
+            }
+        });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
 
     @Override
     public void onAttach(Context context) {

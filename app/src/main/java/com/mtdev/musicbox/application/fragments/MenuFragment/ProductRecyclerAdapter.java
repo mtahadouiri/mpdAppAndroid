@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mtdev.musicbox.AppConfig;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.activities.MainActivity;
 import com.mtdev.musicbox.application.entities.Product;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecyclerAdapter.MyViewHolder> {
 
-    private List<Product> localTracks;
+    private List<Product> productList;
     private Context ctx;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -47,8 +48,8 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
         }
     }
 
-    public ProductRecyclerAdapter(List<Product> localTracks, Context ctx) {
-        this.localTracks = localTracks;
+    public ProductRecyclerAdapter(List<Product> productList, Context ctx) {
+        this.productList = productList;
         this.ctx = ctx;
     }
 
@@ -62,12 +63,12 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
 
     @Override
     public void onBindViewHolder(final ProductRecyclerAdapter.MyViewHolder holder, int position) {
-        final Product track = localTracks.get(position);
+        final Product track = productList.get(position);
         holder.title.setText(track.getName());
         final String pName = track.getName().toString();
         holder.artist.setText(track.getDetails());
         holder.price.setText(track.getPrice()+" DT");
-        Picasso.with(ctx).load(track.getImgUrl()).into(holder.art);
+        Picasso.with(ctx).load(AppConfig.URL_GETIMG_PREFIX+track.getImgUrl()).into(holder.art);
         holder.openDiaglog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,20 +140,7 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
 
     @Override
     public int getItemCount() {
-        return localTracks.size();
+        return productList.size();
     }
 
-    public static Bitmap getAlbumArt(String path) {
-        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        Bitmap bitmap = null;
-
-        byte[] data = mmr.getEmbeddedPicture();
-        if (data != null) {
-            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            return bitmap;
-        } else {
-            return null;
-        }
-    }
 }
