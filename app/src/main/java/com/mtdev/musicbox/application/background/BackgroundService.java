@@ -25,21 +25,13 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
-import com.mtdev.musicbox.mpdservice.ConnectionManager;
-import com.mtdev.musicbox.mpdservice.handlers.MPDConnectionStateChangeHandler;
-import com.mtdev.musicbox.mpdservice.handlers.MPDStatusChangeHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDCommandHandler;
-import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDStateMonitoringHandler;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.MPDInterface;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
-import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
-import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
-import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 
 public class BackgroundService extends Service implements AudioManager.OnAudioFocusChangeListener {
     private static final String TAG = BackgroundService.class.getSimpleName();
+    private Calendar previous;
 
     public enum STREAMING_STATUS {
         STOPPED,
@@ -326,7 +318,25 @@ public class BackgroundService extends Service implements AudioManager.OnAudioFo
      */
     private void onNext() {
         checkMPDConnection();
-        MPDCommandHandler.nextSong();
+        SkipSong();
+    }
+    private void SkipSong() {
+        if(previous == null){
+            //at least 20 minutes difference
+            MPDCommandHandler.nextSong();
+            previous = Calendar.getInstance();
+        }else{
+            Calendar now = Calendar.getInstance();
+            long diff = now.getTimeInMillis() - previous.getTimeInMillis();
+            if(diff >= 15 * 60 * 1000)
+            {
+                //at least 20 minutes difference
+                MPDCommandHandler.nextSong();
+                previous = Calendar.getInstance();
+            }
+            else{
+            }
+        }
     }
 
     /**

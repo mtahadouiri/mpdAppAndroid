@@ -56,7 +56,7 @@ public abstract class GenericActivity extends AppCompatActivity implements Share
         // Read theme preference
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String themePref = sharedPref.getString(getString(R.string.pref_theme_key), getString(R.string.pref_theme_default));
-        boolean darkTheme = sharedPref.getBoolean(getString(R.string.pref_dark_theme_key), getResources().getBoolean(R.bool.pref_theme_dark_default));
+       /* boolean darkTheme = sharedPref.getBoolean(getString(R.string.pref_dark_theme_key), getResources().getBoolean(R.bool.pref_theme_dark_default));
         if (darkTheme) {
             if (themePref.equals(getString(R.string.pref_indigo_key))) {
                 setTheme(R.style.AppTheme_indigo);
@@ -96,7 +96,9 @@ public abstract class GenericActivity extends AppCompatActivity implements Share
         }
         if (themePref.equals(getString(R.string.pref_oleddark_key))) {
             setTheme(R.style.AppTheme_oledDark);
-        }
+        }*/
+        setTheme(R.style.AppTheme_red);
+
         mErrorListener = new MPDErrorListener(this);
     }
 
