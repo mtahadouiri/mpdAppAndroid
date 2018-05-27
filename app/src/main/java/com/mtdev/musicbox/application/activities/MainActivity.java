@@ -2,12 +2,10 @@
 
 package com.mtdev.musicbox.application.activities;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,11 +20,9 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -97,7 +93,6 @@ import com.mtdev.musicbox.application.utils.AllPlaylists;
 import com.mtdev.musicbox.application.utils.Artist;
 import com.mtdev.musicbox.application.utils.MusicFolder;
 import com.mtdev.musicbox.application.utils.PlayListsHorizontalAdapter;
-import com.mtdev.musicbox.application.utils.ProductListJSONParser;
 import com.mtdev.musicbox.application.utils.Settings;
 import com.mtdev.musicbox.application.utils.ThemeUtils;
 import com.mtdev.musicbox.application.views.CurrentPlaylistView;
@@ -129,7 +124,6 @@ import java.util.Map;
 
 import static android.view.View.GONE;
 import static com.mtdev.musicbox.AppConfig.HOST;
-import static com.mtdev.musicbox.AppConfig.URL_SELECTPRODUCTS;
 import static com.mtdev.musicbox.application.SQLiteHandler.paymentPrix;
 
 public class MainActivity extends GenericActivity
@@ -1108,7 +1102,7 @@ public class MainActivity extends GenericActivity
                         if (plFrag != null) {
                             plFrag.dataChanged();
                         }*/
-                        //new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                         dialog.dismiss();
                         try {

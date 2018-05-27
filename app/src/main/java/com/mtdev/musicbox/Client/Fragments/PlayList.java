@@ -27,9 +27,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.google.gson.Gson;
 import com.mtdev.musicbox.Client.Utils.ClickItemTouchListener;
+import com.mtdev.musicbox.Client.Utils.ImageLoader;
 import com.mtdev.musicbox.Client.Utils.ViewAllPlaylistsRecyclerAdapter;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.activities.MainActivity;
@@ -41,7 +41,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.mtdev.musicbox.application.activities.MainActivity.allPlaylists;
 import static com.mtdev.musicbox.application.activities.MainActivity.themeColor;
 
-public class PlayList extends Fragment  {
+public class PlayList extends Fragment {
     public static final String TAG = PlayList.class.getSimpleName();
     private FABFragmentCallback mFABCallback = null;
     public RecyclerView allPlaylistRecycler;
@@ -138,6 +138,7 @@ public class PlayList extends Fragment  {
             Log.d("TIME", "start");
             String json2 = mPrefs.getString("allPlaylists", "");
             allPlaylists = gson.fromJson(json2, AllPlaylists.class);
+            Log.d("All playlists",allPlaylists.getPlaylists().size()+"");
             Log.d("TIME", "allPlaylists");
             String json3 = mPrefs.getString("queue", "");
         } catch (Exception e) {
