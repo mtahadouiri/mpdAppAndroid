@@ -159,7 +159,7 @@ public class MainActivity extends GenericActivity
     private VIEW_SWITCHER_STATUS mSavedNowPlayingViewSwitcherStatus;
 
     private boolean mHeaderImageActive;
-
+    private MenuItem playlist;
     private boolean mUseArtistSort;
 
     private FloatingActionButton mFAB;
@@ -499,6 +499,7 @@ public class MainActivity extends GenericActivity
         } */else if (id == R.id.nav_server_properties) {
             /*fragment = new ServerPropertiesFragment();
             fragmentTag = ServerPropertiesFragment.TAG;*/
+            playlist = item;
             fragment = new PlayList();
             fragmentTag = PlayList.TAG;
             Log.d(fragmentTag,"Opened");
@@ -1090,6 +1091,8 @@ public class MainActivity extends GenericActivity
                             pl.getSongList().add(ut);
                         }
                         allPlaylists.addPlaylist(pl);
+                        Log.d("playlists ",allPlaylists.getPlaylists().size()+"");
+
                         finalSelectedTracks.clear();
                         if (pAdapter != null) {
                             pAdapter.notifyDataSetChanged();
@@ -1311,7 +1314,9 @@ public class MainActivity extends GenericActivity
                         dos.write(mybytearray, 0, mybytearray.length);
                         dos.flush();
                         sock.close();
+
                     }
+                    playlist.setVisible(false);
 
                 } catch (Exception e) {
                     Log.e("Exception","error in transfer");

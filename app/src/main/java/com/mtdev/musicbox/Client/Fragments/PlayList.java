@@ -150,7 +150,7 @@ public class PlayList extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            getSavedData();
+            //getSavedData();
             return "done";
         }
 
@@ -174,6 +174,7 @@ public class PlayList extends Fragment {
                     if (allPlaylists == null) {
                         allPlaylists = new AllPlaylists();
                     }
+                    Log.d("TIME", ""+allPlaylists.getPlaylists().size());
 
                     vpAdapter = new ViewAllPlaylistsRecyclerAdapter(allPlaylists.getPlaylists(), getContext());
                     mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
