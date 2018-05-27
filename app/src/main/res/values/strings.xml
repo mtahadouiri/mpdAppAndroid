@@ -1,24 +1,4 @@
-<!--
-  ~  Copyright (C) 2018 Team Gateship-One
-  ~  (Hendrik Borghorst & Frederik Luetkes)
-  ~
-  ~  The AUTHORS.md file contains a detailed contributors list:
-  ~  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
-  ~
-  ~  This program is free software: you can redistribute it and/or modify
-  ~  it under the terms of the GNU General Public License as published by
-  ~  the Free Software Foundation, either version 3 of the License, or
-  ~  (at your option) any later version.
-  ~
-  ~  This program is distributed in the hope that it will be useful,
-  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~  GNU General Public License for more details.
-  ~
-  ~  You should have received a copy of the GNU General Public License
-  ~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  ~
-  -->
+<?xml version="1.0"?>
 
 <resources>
     <string name="app_name" translatable="false">@string/app_name_nice</string>
@@ -432,17 +412,16 @@
     <string name="bulk_download_notice_title">Image download</string>
     <string name="bulk_download_notice_text">Downloading a large amount of images puts heavy load on the servers of the service you chose. It may occur that a server load prevents downloading of images. The downloader will then cancel its action if it detects an overload.\n\nPlease consider donating to the artwork services.</string>
 
-    <!-- About activity -->
-    <string name="artwork_provided_by">Artwork provided by:</string>
-    <string name="acknowledgement_text">Big thanks to Frederik Lütkes for his continuous pressure to develop Odyssey, a music player on which this GUI is based on.</string>
+
+    <string name="acknowledgement_text">Big thanks to our tutor Manel Khiari , our families and the stackoverflow/mopidy community who without them this project would not be.</string>
     <string name="license_text">This application is licensed under the GPLv3 license.\nMaterial icons are licensed under the CC-BY license by Google.</string>
-    <string name="sources_text">The source code is available on GitHub:\nhttps://github.com/gateship-one/malp</string>
+    <string name="sources_text">The source code is available on GitHub:\nhttps://github.com/mtahadouiri/mpdAppAndroid</string>
     <string name="activity_about_version">Version: </string>
 
     <string name="url_musicbrainz" translatable="false">https://www.musicbrainz.org</string>
     <string name="url_lastfm" translatable="false">https://www.last.fm</string>
     <string name="url_fanarttv" translatable="false">https://fanart.tv</string>
-    <string name="url_faq" translatable="false">https://github.com/gateship-one/malp/wiki/FAQ</string>
+    <string name="url_faq" translatable="false">https://github.com/mtahadouiri/mpdAppAndroid</string>
 
     <!-- Bulk downloader service -->
     <string name="downloader_notification_title">Bulk download running</string>
@@ -455,17 +434,6 @@
     <string name="widget_disconnected">Disconnected</string>
     <string name="widget_connect">Connect</string>
 
-    <!-- Contributors activity -->
-    <string name="contributors_title">Contributors</string>
-    <string name="contributor_team" translatable="false">Team Gateship One</string>
-    <string name="contributor_translator_japanese">Japanese Translation</string>
-    <string name="contributor_translator_french">French Translation</string>
-    <string name="contributor_translator_spanish">Spanish Translation</string>
-    <string name="contributor_translator_korean">Korean Translation</string>
-
-    <!-- Thirdparty Licenses dialog -->
-    <string name="thirdparty_licenses_dialog_title">Third Party Licenses</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="contributors_title">Developers</string>
 </resources>

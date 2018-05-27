@@ -120,6 +120,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingEnd="@dimen/material_screen_edge_spacing"
+                android:visibility="invisible"
+
                 android:paddingStart="@dimen/material_screen_edge_spacing">
 
                 <ImageView
@@ -144,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingEnd="@dimen/material_screen_edge_spacing"
+                android:visibility="invisible"
                 android:paddingStart="@dimen/material_screen_edge_spacing">
 
                 <ImageButton

@@ -1,24 +1,4 @@
-/*
- *  Copyright (C) 2018 Team Gateship-One
- *  (Hendrik Borghorst & Frederik Luetkes)
- *
- *  The AUTHORS.md file contains a detailed contributors list:
- *  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+
 
 package com.mtdev.musicbox.application.activities;
 
@@ -75,11 +55,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mtdev.musicbox.AppConfig;
 import com.mtdev.musicbox.Client.Activities.Login;
-import com.mtdev.musicbox.Client.Activities.Register;
 import com.mtdev.musicbox.Client.Entities.AllMusicFolders;
 import com.mtdev.musicbox.Client.Entities.LocalTrack;
 import com.mtdev.musicbox.Client.Entities.Playlist;
-import com.mtdev.musicbox.Client.Entities.Product;
 import com.mtdev.musicbox.Client.Entities.UnifiedTrack;
 import com.mtdev.musicbox.Client.Fragments.NewPlaylistFragment;
 import com.mtdev.musicbox.Client.Fragments.PlayList;
@@ -95,7 +73,6 @@ import com.mtdev.musicbox.application.entities.ProductType;
 import com.mtdev.musicbox.application.fragments.ArtworkSettingsFragment;
 import com.mtdev.musicbox.application.fragments.CartFragment.CartFragment;
 import com.mtdev.musicbox.application.fragments.EditProfileFragment;
-import com.mtdev.musicbox.application.fragments.InformationSettingsFragment;
 import com.mtdev.musicbox.application.fragments.MenuFragment.MenuHomeFragment;
 import com.mtdev.musicbox.application.fragments.MenuFragment.ProductsFragment;
 import com.mtdev.musicbox.application.fragments.ProfilesFragment;
@@ -113,7 +90,6 @@ import com.mtdev.musicbox.application.fragments.serverfragments.SongDetailsDialo
 import com.mtdev.musicbox.application.utils.Album;
 import com.mtdev.musicbox.application.utils.AllPlaylists;
 import com.mtdev.musicbox.application.utils.Artist;
-import com.mtdev.musicbox.application.utils.CommonUtils;
 import com.mtdev.musicbox.application.utils.MusicFolder;
 import com.mtdev.musicbox.application.utils.PlayListsHorizontalAdapter;
 import com.mtdev.musicbox.application.utils.Settings;
@@ -131,9 +107,6 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDProfileManager;
 import com.mtdev.musicbox.mpdservice.profilemanagement.MPDServerProfile;
 import com.pusher.pushnotifications.PushNotifications;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -517,19 +490,19 @@ public class MainActivity extends GenericActivity
         } else if (id == R.id.nav_profiles) {
             fragment = new ProfilesFragment();
             fragmentTag = ProfilesFragment.TAG;
-        } else if (id == R.id.nav_app_settings) {
+        } /*else if (id == R.id.nav_app_settings) {
             fragment = new SettingsFragment();
             fragmentTag = SettingsFragment.TAG;
-        } else if (id == R.id.nav_server_properties) {
+        } */else if (id == R.id.nav_server_properties) {
             /*fragment = new ServerPropertiesFragment();
             fragmentTag = ServerPropertiesFragment.TAG;*/
             fragment = new PlayList();
             fragmentTag = PlayList.TAG;
             Log.d(fragmentTag,"Opened");
-        } else if (id == R.id.nav_information) {
+        } /*else if (id == R.id.nav_information) {
             fragment = new InformationSettingsFragment();
             fragmentTag = InformationSettingsFragment.class.getSimpleName();
-        } else if (id == R.id.shop) {
+        } */else if (id == R.id.shop) {
             fragment = new MenuHomeFragment();
             fragmentTag = MenuHomeFragment.class.getSimpleName();
         }else if (id == R.id.logout) {
