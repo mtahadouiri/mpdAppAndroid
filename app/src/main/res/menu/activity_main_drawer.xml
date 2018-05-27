@@ -55,10 +55,15 @@
         android:title="@string/menu_settings">
         <menu>
             <item
-                android:id="@+id/nav_profiles"
+            android:id="@+id/nav_profiles"
+            android:checkable="true"
+            android:icon="@drawable/ic_settings_profiles_24dp"
+            android:title="@string/menu_profiles" />
+            <item
+                android:id="@+id/maps"
                 android:checkable="true"
-                android:icon="@drawable/ic_settings_profiles_24dp"
-                android:title="@string/menu_profiles" />
+                android:icon="@drawable/ic_album_24dp"
+                android:title="Maps" />
            <!-- <item
                 android:id="@+id/nav_app_settings"
                 android:checkable="true"

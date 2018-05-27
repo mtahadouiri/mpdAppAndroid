@@ -58,6 +58,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.mtdev.musicbox.AppConfig;
+import com.mtdev.musicbox.Client.Activities.GoogleMapsActivity;
 import com.mtdev.musicbox.Client.Activities.Login;
 import com.mtdev.musicbox.Client.Entities.AllMusicFolders;
 import com.mtdev.musicbox.Client.Entities.LocalTrack;
@@ -523,6 +524,10 @@ public class MainActivity extends GenericActivity
 
                db.deleteUsers();
             Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+            return true;
+        }else if (id == R.id.maps) {
+            Intent intent = new Intent(MainActivity.this, GoogleMapsActivity.class);
             startActivity(intent);
             return true;
         }
@@ -1213,8 +1218,11 @@ public class MainActivity extends GenericActivity
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
+                SharedPreferences settings = MainActivity.this.getSharedPreferences("USER", 0);
+               int id= settings.getInt("id",0);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("price", String.valueOf(paymentPrix));
+                params.put("user_id", String.valueOf(id));
                 return params;
             }
 
@@ -1252,7 +1260,7 @@ public class MainActivity extends GenericActivity
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("product_id", "3");
+                params.put("product_id",  String.valueOf(p.getId()));
                 params.put("commande_id", String.valueOf(commandID));
                 params.put("quantite", String.valueOf(p.getQuantity()));
                 return params;

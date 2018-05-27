@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mpdAppAndroid.iml" filepath="$PROJECT_DIR$/mpdAppAndroid.iml" />
+      <module fileurl="file://C:\Users\PC\Documents\Ibedroid\ChedliWeldi2\mpdAppAndroidNew\mpdAppAndroid.iml" filepath="C:\Users\PC\Documents\Ibedroid\ChedliWeldi2\mpdAppAndroidNew\mpdAppAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mpdAppAndroidNew.iml" filepath="$PROJECT_DIR$/mpdAppAndroidNew.iml" />
     </modules>
   </component>
 </project>

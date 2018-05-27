@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mtdev.musicbox.AppConfig;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.entities.Product;
 import com.squareup.picasso.Picasso;
@@ -64,7 +65,7 @@ public class CartRecyclerAdapter extends RecyclerView.Adapter<CartRecyclerAdapte
         holder.title.setText(track.getName());
         holder.price.setText(track.getPrice()+" DT");
         holder.quantiy.setText(track.getQuantity()+"  ");
-        Picasso.with(ctx).load(track.getImgUrl()).into(holder.art);
+        Picasso.with(ctx).load(AppConfig.URL_GETIMG_PREFIX+track.getImgUrl()).into(holder.art);
 
     }
 

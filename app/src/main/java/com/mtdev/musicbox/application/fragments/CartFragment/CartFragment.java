@@ -1,6 +1,7 @@
 package com.mtdev.musicbox.application.fragments.CartFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mtdev.musicbox.Client.Activities.Login;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.activities.MainActivity;
 import com.mtdev.musicbox.application.entities.Cart;
@@ -102,7 +104,9 @@ public class CartFragment extends Fragment {
             public void onClick(View view) {
                 mCallback.onConfirmCommand();
                 db.deleteProducts();
-
+                Intent intent = new Intent(getContext(),
+                        MainActivity.class);
+                startActivity(intent);
               //  Toast.makeText(getApplicationContext(), "Command successfully sent. Please wait for your order!", Toast.LENGTH_LONG).show();
 
             }
