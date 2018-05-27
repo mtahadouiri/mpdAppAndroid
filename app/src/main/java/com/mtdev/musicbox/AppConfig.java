@@ -20,6 +20,6 @@ public class AppConfig {
     // Directory name to store captured images and videos
     public static final String IMAGE_DIRECTORY_NAME = "Android File Upload";
 
-    public static final String HOST = "192.168.4.1";
+    public static final String HOST = "192.168.1.19";
 
 }
