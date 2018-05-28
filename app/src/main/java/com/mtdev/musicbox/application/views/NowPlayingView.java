@@ -68,7 +68,6 @@ import com.mtdev.musicbox.application.fragments.TextDialog;
 import com.mtdev.musicbox.application.fragments.serverfragments.ChoosePlaylistDialog;
 import com.mtdev.musicbox.application.utils.CoverBitmapLoader;
 import com.mtdev.musicbox.application.utils.FormatHelper;
-import com.mtdev.musicbox.application.utils.OutputResponseMenuHandler;
 import com.mtdev.musicbox.application.utils.ThemeUtils;
 import com.mtdev.musicbox.application.utils.VolumeButtonLongClickListener;
 import com.mtdev.musicbox.mpdservice.ConnectionManager;
@@ -86,6 +85,8 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Locale;
+
+import static com.mtdev.musicbox.application.activities.MainActivity.previous;
 
 public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuItemClickListener, ArtworkManager.onNewAlbumImageListener, ArtworkManager.onNewArtistImageListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -235,7 +236,6 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
     private MPDTrack mLastTrack;
 
     private boolean mUseEnglishWikipedia;
-    private Calendar previous;
 
     public NowPlayingView(Context context) {
         this(context, null, 0);
@@ -544,8 +544,7 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
         }
 
         mVolumeStepSize = sharedPref.getInt(getContext().getString(R.string.pref_volume_steps_key), getResources().getInteger(R.integer.pref_volume_steps_default));
-        mPlusListener.setVolumeStepSize(mVolumeStepSize);
-        mMinusListener.setVolumeStepSize(mVolumeStepSize);
+
     }
 
     @Override
@@ -865,33 +864,15 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
 
         // seekbar (position)
         mPositionSeekbar = findViewById(R.id.now_playing_seekBar);
-        mPositionSeekbar.setOnSeekBarChangeListener(new PositionSeekbarListener());
-
+        mPositionSeekbar.setClickable(false);
         mVolumeSeekbar = findViewById(R.id.volume_seekbar);
         mVolumeIcon = findViewById(R.id.volume_icon);
-        mVolumeIcon.setOnClickListener(view -> MPDCommandHandler.setVolume(0));
-
-        mVolumeIcon.setOnLongClickListener(view -> {
-
-            MPDQueryHandler.getOutputs(new OutputResponseMenuHandler(getContext(), view));
-
-            return true;
-        });
 
         mVolumeSeekbar.setMax(100);
-        mVolumeSeekbar.setOnSeekBarChangeListener(new VolumeSeekBarListener());
-
+        mVolumeSeekbar.setClickable(false);
 
         /* Volume control buttons */
         mVolumeIconButtons = findViewById(R.id.volume_icon_buttons);
-        mVolumeIconButtons.setOnClickListener(view -> MPDCommandHandler.setVolume(0));
-
-        mVolumeIconButtons.setOnLongClickListener(view -> {
-
-            MPDQueryHandler.getOutputs(new OutputResponseMenuHandler(getContext(), view));
-
-            return true;
-        });
 
         mVolumeText = findViewById(R.id.volume_button_text);
 
@@ -900,18 +881,7 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
         mVolumeMinus.setOnClickListener(v -> MPDCommandHandler.decreaseVolume(mVolumeStepSize));
 
         mVolumePlus = findViewById(R.id.volume_button_plus);
-        mVolumePlus.setOnClickListener(v -> MPDCommandHandler.increaseVolume(mVolumeStepSize));
-
-        /* Create two listeners that start a repeating timer task to repeat the volume plus/minus action */
-        mPlusListener = new VolumeButtonLongClickListener(VolumeButtonLongClickListener.LISTENER_ACTION.VOLUME_UP, mVolumeStepSize);
-        mMinusListener = new VolumeButtonLongClickListener(VolumeButtonLongClickListener.LISTENER_ACTION.VOLUME_DOWN, mVolumeStepSize);
-
-        /* Set the listener to the plus/minus button */
-        mVolumeMinus.setOnLongClickListener(mMinusListener);
-        mVolumeMinus.setOnTouchListener(mMinusListener);
-
-        mVolumePlus.setOnLongClickListener(mPlusListener);
-        mVolumePlus.setOnTouchListener(mPlusListener);
+        mVolumePlus.setOnClickListener(v -> Toast.makeText(getContext(),"Only admin can change the volume.",Toast.LENGTH_LONG).show());
 
         mVolumeSeekbarLayout = findViewById(R.id.volume_seekbar_layout);
         mVolumeButtonLayout = findViewById(R.id.volume_button_layout);
@@ -923,7 +893,7 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
         mDraggedUpButtons.setAlpha(0.0f);
 
         // add listener to top playpause button
-        mTopPlayPauseButton.setOnClickListener(arg0 -> MPDCommandHandler.togglePause());
+        mTopPlayPauseButton.setOnClickListener(arg0 -> Toast.makeText(getContext(),"Only admin can pause the playlist.",Toast.LENGTH_LONG).show());
 
         // Add listeners to top playlist button
         mTopPlaylistButton.setOnClickListener(v -> {
@@ -959,17 +929,6 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
         // Add listener to top menu button
         mTopMenuButton.setOnClickListener(this::showAdditionalOptionsMenu);
 
-        // Add listener to bottom repeat button
-        mBottomRepeatButton.setOnClickListener(arg0 -> {
-            if (null != mLastStatus) {
-                if (mLastStatus.getRepeat() == 0) {
-                    MPDCommandHandler.setRepeat(true);
-                } else {
-                    MPDCommandHandler.setRepeat(false);
-                }
-            }
-        });
-
         // Add listener to bottom previous button
         mBottomPreviousButton.setOnClickListener(v -> {
             Toast.makeText(getContext(),"Only admin and Premium users can skip back",Toast.LENGTH_LONG).show();
@@ -985,17 +944,6 @@ public class NowPlayingView extends RelativeLayout implements PopupMenu.OnMenuIt
             //init skip
             SkipSong();
 
-        });
-
-        // Add listener to bottom random button
-        mBottomRandomButton.setOnClickListener(arg0 -> {
-            if (null != mLastStatus) {
-                if (mLastStatus.getRandom() == 0) {
-                    MPDCommandHandler.setRandom(true);
-                } else {
-                    MPDCommandHandler.setRandom(false);
-                }
-            }
         });
 
         mCoverImage.setOnClickListener(v -> {

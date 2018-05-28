@@ -1,25 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~  Copyright (C) 2018 Team Gateship-One
-  ~  (Hendrik Borghorst & Frederik Luetkes)
-  ~
-  ~  The AUTHORS.md file contains a detailed contributors list:
-  ~  <https://github.com/gateship-one/malp/blob/master/AUTHORS.md>
-  ~
-  ~  This program is free software: you can redistribute it and/or modify
-  ~  it under the terms of the GNU General Public License as published by
-  ~  the Free Software Foundation, either version 3 of the License, or
-  ~  (at your option) any later version.
-  ~
-  ~  This program is distributed in the hope that it will be useful,
-  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~  GNU General Public License for more details.
-  ~
-  ~  You should have received a copy of the GNU General Public License
-  ~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  ~
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -66,6 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/now_playing_trackName"
                         android:layout_width="wrap_content"
@@ -75,8 +55,8 @@
                         android:fontFamily="sans-serif-medium"
                         android:marqueeRepeatLimit="3"
                         android:scrollHorizontally="true"
-                        android:textColor="?attr/malp_color_text_accent"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textColor="?attr/malp_color_text_accent" />
                 </LinearLayout>
 
                 <!-- FIXME Workround for scrolling text jumping back, when position seekbar is updated -->
@@ -161,10 +141,10 @@
                 android:id="@+id/now_playing_view_switcher"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inAnimation="@anim/fade_in"
-                android:outAnimation="@anim/fade_out"
                 android:layout_above="@+id/now_playing_control_layout"
-                android:background="?attr/malp_color_background">
+                android:background="?attr/malp_color_background"
+                android:inAnimation="@anim/fade_in"
+                android:outAnimation="@anim/fade_out">
 
                 <ScrollView
                     android:id="@+id/now_playing_view_cover_layout"
@@ -189,9 +169,9 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingBottom="@dimen/material_content_spacing"
-                            android:paddingStart="@dimen/material_screen_edge_spacing"
                             android:paddingEnd="@dimen/material_screen_edge_spacing"
-                            >
+                            android:paddingStart="@dimen/material_screen_edge_spacing">
+
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -212,11 +192,11 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/material_content_spacing"
                                 android:fontFamily="sans-serif-regular"
                                 android:text="@string/song_playlist_no"
                                 android:textColor="?attr/malp_color_text_background_secondary"
-                                android:textSize="@dimen/material_font_style_size_body_1"
-                                android:layout_marginTop="@dimen/material_content_spacing"/>
+                                android:textSize="@dimen/material_font_style_size_body_1" />
 
                             <TextView
                                 android:id="@+id/now_playing_text_playlist_no"
@@ -229,11 +209,11 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/material_content_spacing"
                                 android:fontFamily="sans-serif-regular"
                                 android:text="@string/song_bitrate"
                                 android:textColor="?attr/malp_color_text_background_secondary"
-                                android:textSize="@dimen/material_font_style_size_body_1"
-                                android:layout_marginTop="@dimen/material_content_spacing"/>
+                                android:textSize="@dimen/material_font_style_size_body_1" />
 
                             <TextView
                                 android:id="@+id/now_playing_text_bitrate"
@@ -246,11 +226,11 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/material_content_spacing"
                                 android:fontFamily="sans-serif-regular"
                                 android:text="@string/song_audio_properties"
                                 android:textColor="?attr/malp_color_text_background_secondary"
-                                android:textSize="@dimen/material_font_style_size_body_1"
-                                android:layout_marginTop="@dimen/material_content_spacing"/>
+                                android:textSize="@dimen/material_font_style_size_body_1" />
 
                             <TextView
                                 android:id="@+id/now_playing_text_audio_properties"
@@ -263,11 +243,11 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/material_content_spacing"
                                 android:fontFamily="sans-serif-regular"
                                 android:text="@string/song_uri"
                                 android:textColor="?attr/malp_color_text_background_secondary"
-                                android:textSize="@dimen/material_font_style_size_body_1"
-                                android:layout_marginTop="@dimen/material_content_spacing"/>
+                                android:textSize="@dimen/material_font_style_size_body_1" />
 
                             <TextView
                                 android:id="@+id/now_playing_text_track_uri"
@@ -293,8 +273,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="vertical"
                 android:background="?attr/colorPrimary"
+                android:orientation="vertical"
                 android:paddingBottom="?attr/actionBarSize">
 
                 <RelativeLayout
@@ -310,16 +290,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:textColor="?attr/malp_color_text_accent"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:textColor="?attr/malp_color_text_accent" />
 
                     <TextView
                         android:id="@+id/now_playing_duration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:textColor="?attr/malp_color_text_accent"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:textColor="?attr/malp_color_text_accent" />
 
 
                 </RelativeLayout>
@@ -328,7 +308,6 @@
                     android:id="@+id/volume_seekbar_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
                     android:paddingEnd="@dimen/material_screen_edge_spacing"
                     android:paddingStart="@dimen/material_screen_edge_spacing">
 
@@ -352,7 +331,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:paddingEnd="@dimen/material_screen_edge_spacing"
-                    android:visibility="invisible"
                     android:paddingStart="@dimen/material_screen_edge_spacing">
 
                     <ImageButton
@@ -361,8 +339,9 @@
                         android:layout_height="48dp"
                         android:layout_marginEnd="4dp"
                         android:background="?android:selectableItemBackground"
-                        android:tint="?attr/malp_color_text_accent"
-                        android:src="@drawable/ic_minus_black_48dp"/>
+                        android:src="@drawable/ic_minus_black_48dp"
+                        android:tint="?attr/malp_color_text_accent" />
+
                     <ImageView
                         android:id="@+id/volume_icon_buttons"
                         android:layout_width="32dp"
@@ -371,22 +350,24 @@
                         android:layout_marginEnd="4dp"
                         android:src="@drawable/ic_volume_high_black_48dp"
                         android:tint="?android:textColor" />
+
                     <TextView
                         android:id="@+id/volume_button_text"
                         android:layout_width="48dp"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textColor="?attr/malp_color_text_accent"
                         android:layout_marginEnd="4dp"
-                        android:text="100%"/>
+                        android:gravity="center"
+                        android:text="100%"
+                        android:textColor="?attr/malp_color_text_accent" />
+
                     <ImageButton
                         android:id="@+id/volume_button_plus"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_marginEnd="4dp"
                         android:background="?android:selectableItemBackground"
-                        android:tint="?attr/malp_color_text_accent"
-                        android:src="@drawable/ic_plus_black_48dp"/>
+                        android:src="@drawable/ic_plus_black_48dp"
+                        android:tint="?attr/malp_color_text_accent" />
 
                 </LinearLayout>
 

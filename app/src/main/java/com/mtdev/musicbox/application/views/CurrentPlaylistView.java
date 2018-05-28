@@ -9,12 +9,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.adapters.CurrentPlaylistAdapter;
 import com.mtdev.musicbox.application.utils.ScrollSpeedListener;
 import com.mtdev.musicbox.mpdservice.handlers.serverhandler.MPDCommandHandler;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDFileEntry;
+
+import java.util.Calendar;
+
+import static com.mtdev.musicbox.application.activities.MainActivity.previous;
 
 public class CurrentPlaylistView extends LinearLayout implements AdapterView.OnItemClickListener {
     Context mContext;
@@ -48,7 +53,28 @@ public class CurrentPlaylistView extends LinearLayout implements AdapterView.OnI
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        MPDCommandHandler.playSongIndex(position);
+        SkipSong(position);
+    }
+    private void SkipSong(int position) {
+        if(previous == null){
+            //at least 20 minutes difference
+            MPDCommandHandler.playSongIndex(position);
+            previous = Calendar.getInstance();
+            Toast.makeText(getContext(),"Song skipped , your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+        }else{
+            Calendar now = Calendar.getInstance();
+            long diff = now.getTimeInMillis() - previous.getTimeInMillis();
+            if(diff >= 15 * 60 * 1000)
+            {
+                //at least 20 minutes difference
+                MPDCommandHandler.playSongIndex(position);
+                previous = Calendar.getInstance();
+                Toast.makeText(getContext(),"Song skipped , your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(getContext(),"You already skipped a song, your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     public void onResume() {

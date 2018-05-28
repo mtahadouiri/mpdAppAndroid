@@ -119,6 +119,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,7 +178,7 @@ public class MainActivity extends GenericActivity
     public static com.mtdev.musicbox.application.SQLiteHandler db ;
     public SQLiteHandler dbUser;
     public static List<Product> productList;
-
+    public static Calendar previous;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

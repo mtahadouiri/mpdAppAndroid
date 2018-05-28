@@ -60,8 +60,8 @@ public class VolumeStepPreferenceDialog extends DialogFragment implements SeekBa
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mVolumeStepSize = progress;
-        updateLabels();
+        /*mVolumeStepSize = progress;
+        updateLabels();*/
     }
 
     @Override

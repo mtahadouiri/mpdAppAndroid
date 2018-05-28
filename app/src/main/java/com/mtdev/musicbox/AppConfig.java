@@ -6,7 +6,7 @@ package com.mtdev.musicbox;
 
 public class AppConfig {
 
-    public static String MY_IP_ADRESS = "192.168.1.18" ;
+    public static String MY_IP_ADRESS = "192.168.1.2" ;
 
 
     public static String URL_LOGIN = "http://"+MY_IP_ADRESS +"/piDev/Login.php";
@@ -25,7 +25,8 @@ public class AppConfig {
 
     public static String URL_ADDPRODUCT_COMMAND = "http://"+MY_IP_ADRESS +"/piDev/addProduct_Commande.php";
 
-    public static String URL_GETIMG_PREFIX = "http://"+MY_IP_ADRESS +"/images/";
+    public static String URL_GETIMG_PREFIXOLD = "http://"+MY_IP_ADRESS +"/images/";
+    public static String URL_GETIMG_PREFIX = "http://192.168.1.2:8000/images/";
 
     // Directory name to store captured images and videos
     public static final String IMAGE_DIRECTORY_NAME = "Android File Upload";

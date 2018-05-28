@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.mtdev.musicbox.R;
@@ -34,8 +35,11 @@ import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDCurrentStatus;
 import com.mtdev.musicbox.mpdservice.mpdprotocol.mpdobjects.MPDTrack;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.mtdev.musicbox.application.activities.MainActivity.previous;
 
 public class FanartActivity extends GenericActivity {
     private static final String TAG = FanartActivity.class.getSimpleName();
@@ -133,13 +137,13 @@ public class FanartActivity extends GenericActivity {
         mPlayPauseButton = findViewById(R.id.button_playpause);
 
 
-        mPreviousButton.setOnClickListener(v -> MPDCommandHandler.previousSong());
+        mPreviousButton.setOnClickListener(v -> Toast.makeText(this,"Only admin and premium users can skip back",Toast.LENGTH_LONG).show());
 
-        mNextButton.setOnClickListener(v -> MPDCommandHandler.nextSong());
+        mNextButton.setOnClickListener(v -> SkipSong());
 
-        mStopButton.setOnClickListener(view -> MPDCommandHandler.stop());
+        mStopButton.setOnClickListener(view -> Toast.makeText(this,"Only admin can Pause/Stop the playlist",Toast.LENGTH_LONG).show());
 
-        mPlayPauseButton.setOnClickListener(view -> MPDCommandHandler.togglePause());
+        mPlayPauseButton.setOnClickListener(view -> Toast.makeText(this,"Only admin and premium users can skip back",Toast.LENGTH_LONG).show());
 
 
         if (null == mStateListener) {
@@ -160,38 +164,23 @@ public class FanartActivity extends GenericActivity {
 
         // seekbar (position)
         mPositionSeekbar = findViewById(R.id.now_playing_seekBar);
-        mPositionSeekbar.setOnSeekBarChangeListener(new PositionSeekbarListener());
-
+        mPositionSeekbar.setClickable(false);
         mVolumeSeekbar = findViewById(R.id.volume_seekbar);
         mVolumeIcon = findViewById(R.id.volume_icon);
-        mVolumeIcon.setOnClickListener(view -> MPDCommandHandler.setVolume(0));
-        mVolumeSeekbar.setMax(100);
-        mVolumeSeekbar.setOnSeekBarChangeListener(new VolumeSeekBarListener());
 
+        mVolumeSeekbar.setMax(100);
+        mVolumeSeekbar.setClickable(false);
         /* Volume control buttons */
         mVolumeIconButtons = findViewById(R.id.volume_icon_buttons);
-        mVolumeIconButtons.setOnClickListener(view -> MPDCommandHandler.setVolume(0));
 
         mVolumeText = findViewById(R.id.volume_button_text);
 
         mVolumeMinus = findViewById(R.id.volume_button_minus);
 
-        mVolumeMinus.setOnClickListener(v -> MPDCommandHandler.decreaseVolume(mVolumeStepSize));
+        mVolumeMinus.setOnClickListener(v -> Toast.makeText(this,"Only admin can change the volume.",Toast.LENGTH_LONG).show());
 
         mVolumePlus = findViewById(R.id.volume_button_plus);
-        mVolumePlus.setOnClickListener(v -> MPDCommandHandler.increaseVolume(mVolumeStepSize));
-
-        /* Create two listeners that start a repeating timer task to repeat the volume plus/minus action */
-        mPlusListener = new VolumeButtonLongClickListener(VolumeButtonLongClickListener.LISTENER_ACTION.VOLUME_UP,mVolumeStepSize);
-        mMinusListener = new VolumeButtonLongClickListener(VolumeButtonLongClickListener.LISTENER_ACTION.VOLUME_DOWN,mVolumeStepSize);
-
-        /* Set the listener to the plus/minus button */
-        mVolumeMinus.setOnLongClickListener(mMinusListener);
-        mVolumeMinus.setOnTouchListener(mMinusListener);
-
-        mVolumePlus.setOnLongClickListener(mPlusListener);
-        mVolumePlus.setOnTouchListener(mPlusListener);
-
+        mVolumePlus.setOnClickListener(v -> Toast.makeText(this,"Only admin can change the volume.",Toast.LENGTH_LONG).show());
         mVolumeSeekbarLayout = findViewById(R.id.volume_seekbar_layout);
         mVolumeButtonLayout = findViewById(R.id.volume_button_layout);
 
@@ -215,7 +204,27 @@ public class FanartActivity extends GenericActivity {
 
         setVolumeControlSetting();
     }
-
+    private void SkipSong() {
+        if(previous == null){
+            //at least 20 minutes difference
+            MPDCommandHandler.nextSong();
+            previous = Calendar.getInstance();
+            Toast.makeText(this,"Song skipped , your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+        }else{
+            Calendar now = Calendar.getInstance();
+            long diff = now.getTimeInMillis() - previous.getTimeInMillis();
+            if(diff >= 15 * 60 * 1000)
+            {
+                //at least 20 minutes difference
+                MPDCommandHandler.nextSong();
+                previous = Calendar.getInstance();
+                Toast.makeText(this,"Song skipped , your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(this,"You already skipped a song, your next skip will be available in 15 minutes .",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     @Override
     protected void onPause() {
         super.onPause();
