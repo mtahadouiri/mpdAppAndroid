@@ -33,6 +33,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String TABLE = "cart";
     // Login Table Columns names
     private static final String KEY_ID = "id";
+    private static final String KEY_Prod_ID = "prod_id";
     private static final String KEY_NAME = "name";
     private static final String KEY_IMG = "img";
     private static final String KEY_price = "price";
@@ -47,7 +48,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_IMG + " TEXT ,"  + KEY_price + " INTEGER," +
+                + KEY_IMG + " TEXT ,"  + KEY_price + " INTEGER," + KEY_Prod_ID + " INTEGER,"+
                 KEY_quantity + " INTEGER" +")";
         db.execSQL(CREATE_LOGIN_TABLE);
 
@@ -67,7 +68,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addProduct(String name, String img, int price, int quantity) {
+    public void addProduct(String name, String img, int price, int quantity,int prod_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -75,6 +76,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_IMG, img); // img
         values.put(KEY_price, price); // p
         values.put(KEY_quantity, quantity); // q
+        values.put(KEY_Prod_ID, prod_id); // q
+
 
         // Inserting Row
         long id = db.insert(TABLE, null, values);
@@ -94,14 +97,18 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
         Log.d("Cursor",cursor.getCount()+"");
-        while (cursor.moveToNext()) {
+        int i = 0;
+        while (i<cursor.getCount()) {
             Product p = new Product();
             p.setName(cursor.getString(1));
             p.setImgUrl(cursor.getString(2));
             p.setPrice(cursor.getInt(3));
-            p.setQuantity(cursor.getInt(4));
+            p.setQuantity(cursor.getInt(5));
             paymentPrix += cursor.getInt(3);
+            p.setId(cursor.getInt(4));
             products.add(p);
+            i++;
+            cursor.moveToNext();
         }
         cursor.close();
         db.close();

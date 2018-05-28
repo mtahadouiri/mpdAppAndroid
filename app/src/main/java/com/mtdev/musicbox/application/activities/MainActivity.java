@@ -1189,6 +1189,7 @@ public class MainActivity extends GenericActivity
                 Log.d(TAG, " Response: " + response.toString());
                 String idCommand=response.toString();
                 for (com.mtdev.musicbox.application.entities.Product p : myCart.getProducts()){
+                    Log.d("Insertin product",""+p.getId());
                     InsertProductCommand(p,Integer.parseInt(idCommand));
                 }
               /*  new Thread(new Runnable() {
@@ -1218,8 +1219,9 @@ public class MainActivity extends GenericActivity
                 // Posting params to register url
                 SharedPreferences settings = MainActivity.this.getSharedPreferences("USER", 0);
                int id= settings.getInt("id",0);
+               Log.d("paymentPrix ",""+paymentPrix);
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("price", String.valueOf(paymentPrix));
+                params.put("price", String.valueOf(paymentPrix/2));
                 params.put("user_id", String.valueOf(id));
                 return params;
             }

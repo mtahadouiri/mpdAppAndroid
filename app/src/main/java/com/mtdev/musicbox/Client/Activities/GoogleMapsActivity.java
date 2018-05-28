@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -210,6 +209,10 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                     permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mMap.setMyLocationEnabled(true);
+                mMap.setOnMarkerClickListener(this);
+                mMap.getUiSettings().setMapToolbarEnabled(true);
+                getDeviceLocation();
+                GetLocations(0);
             } else {
                 // Permission was denied. Display an error message.
             }

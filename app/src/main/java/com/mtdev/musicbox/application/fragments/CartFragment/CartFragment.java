@@ -15,12 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.mtdev.musicbox.Client.Activities.Login;
 import com.mtdev.musicbox.R;
 import com.mtdev.musicbox.application.activities.MainActivity;
-import com.mtdev.musicbox.application.entities.Cart;
+import com.mtdev.musicbox.application.entities.Product;
 import com.mtdev.musicbox.application.fragments.MenuFragment.ProductsFragment;
 
 import static com.mtdev.musicbox.application.SQLiteHandler.paymentPrix;
@@ -128,8 +126,13 @@ public class CartFragment extends Fragment {
         lv.setLayoutManager(mLayoutManager2);
         lv.setItemAnimator(new DefaultItemAnimator());
         lv.setAdapter(adapter);
+        int prixTot=0 ;
+        for (Product p : db.getProducts()){
+            prixTot +=p.getPrice();
+        }
+        paymentPrix = prixTot;
         Log.d(" prix total ! ", paymentPrix + " DT");
-        totalP.setText("TOTAL PRICE: " + paymentPrix + " DT");
+        totalP.setText("TOTAL PRICE: " + prixTot + " DT");
 
     }
 
